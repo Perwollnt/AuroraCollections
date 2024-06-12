@@ -1,0 +1,130 @@
+package gg.auroramc.collections.config;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import gg.auroramc.collections.AuroraCollections;
+import gg.auroramc.collections.config.menu.CategoriesMenuConfig;
+import gg.auroramc.collections.config.menu.CollectionListMenuConfig;
+import gg.auroramc.collections.config.menu.CollectionMenuConfig;
+import lombok.Getter;
+import lombok.SneakyThrows;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Map;
+import java.util.jar.JarFile;
+import java.util.stream.Stream;
+
+
+@Getter
+public class ConfigManager {
+    private final AuroraCollections plugin;
+    private Config config;
+    private MessageConfig messageConfig;
+    private CategoriesConfig categoriesConfig;
+    private CategoriesMenuConfig categoriesMenuConfig;
+    private CollectionListMenuConfig collectionListMenuConfig;
+    private CollectionMenuConfig collectionMenuConfig;
+    private final Map<String, Map<String, CollectionConfig>> collections = Maps.newConcurrentMap();
+
+    public ConfigManager(AuroraCollections plugin) {
+        this.plugin = plugin;
+        reload();
+    }
+
+    @SneakyThrows
+    public void reload() {
+        boolean saveDefaultCollections = !Config.getFile(plugin).exists();
+
+        Config.saveDefault(plugin);
+        config = new Config(plugin);
+        config.load();
+
+        MessageConfig.saveDefault(plugin, config.getLanguage());
+        messageConfig = new MessageConfig(plugin, config.getLanguage());
+        messageConfig.load();
+
+        CategoriesConfig.saveDefault(plugin);
+        categoriesConfig = new CategoriesConfig(plugin);
+        categoriesConfig.load();
+
+        CategoriesMenuConfig.saveDefault(plugin);
+        categoriesMenuConfig = new CategoriesMenuConfig(plugin);
+        categoriesMenuConfig.load();
+
+        CollectionListMenuConfig.saveDefault(plugin);
+        collectionListMenuConfig = new CollectionListMenuConfig(plugin);
+        collectionListMenuConfig.load();
+
+        CollectionMenuConfig.saveDefault(plugin);
+        collectionMenuConfig = new CollectionMenuConfig(plugin);
+        collectionMenuConfig.load();
+
+        if (saveDefaultCollections) {
+            this.saveDefaultCollections();
+        }
+
+        reloadCollections();
+    }
+
+    private void reloadCollections() {
+        collections.clear();
+        Path collectionsDir = plugin.getDataFolder().toPath().resolve("collections");
+
+        if (!Files.exists(collectionsDir)) {
+            return;
+        }
+
+        for (var dir : categoriesConfig.getCategories().keySet()) {
+            Path categoryDir = collectionsDir.resolve(dir);
+            if (!Files.exists(categoryDir)) {
+                continue;
+            }
+            try (Stream<Path> paths = Files.list(categoryDir)) {
+                paths.filter(Files::isRegularFile)
+                        .filter(path -> path.toString().endsWith(".yml"))
+                        .forEach(path -> {
+                            CollectionConfig collectionConfig = new CollectionConfig(path.toFile());
+                            collectionConfig.load();
+                            collections.computeIfAbsent(dir, k -> Maps.newConcurrentMap())
+                                    .computeIfAbsent(path.getFileName().toString().replace(".yml", ""), k -> collectionConfig);
+                        });
+            } catch (IOException e) {
+                AuroraCollections.logger().warning("Failed to load collections for category: " + dir + " error: " + e.getMessage());
+            }
+        }
+    }
+
+    @SneakyThrows
+    private void saveDefaultCollections() {
+        Path jarPath = Path.of(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+        Path dataFolder = plugin.getDataFolder().toPath();
+
+        try (JarFile jar = new JarFile(jarPath.toFile())) {
+            jar.stream()
+                    .filter(entry -> entry.getName().startsWith("collections/") && entry.getName().endsWith(".yml"))
+
+                    .forEach(entry -> {
+                        Path outFile = dataFolder.resolve(entry.getName());
+                        Path parentDir = outFile.getParent();
+                        if (parentDir != null && !Files.exists(parentDir)) {
+                            try {
+                                Files.createDirectories(parentDir);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        try (InputStream is = jar.getInputStream(entry)) {
+                            Files.copy(is, outFile, StandardCopyOption.REPLACE_EXISTING);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,70 @@
+title: "Collections"
+
+filler:
+  enabled: true
+  item:
+    name: " "
+    material: BLACK_STAINED_GLASS_PANE
+
+items:
+  farming:
+    name: "&a{name} Collections"
+    lore:
+      - "&7View your {name} collections!"
+      - ""
+      - "&eClick to view!"
+    material: WHEAT
+    slot: 20
+  mining:
+    name: "&a{name} Collections"
+    lore:
+      - "&7View your {name} collections!"
+      - ""
+      - "&eClick to view!"
+    material: IRON_PICKAXE
+    slot: 21
+    flags:
+      - HIDE_ATTRIBUTES
+  combat:
+    name: "&a{name} Collections"
+    lore:
+      - "&7View your {name} collections!"
+      - ""
+      - "&eClick to view!"
+    material: DIAMOND_SWORD
+    slot: 22
+    flags:
+      - HIDE_ATTRIBUTES
+  foraging:
+    name: "&a{name} Collections"
+    lore:
+      - "&7View your {name} collections!"
+      - ""
+      - "&eClick to view!"
+    material: OAK_LEAVES
+    slot: 23
+  fishing:
+    name: "&a{name} Collections"
+    lore:
+      - "&7View your {name} collections!"
+      - ""
+      - "&eClick to view!"
+    material: FISHING_ROD
+    slot: 24
+
+custom-items:
+  close:
+    name: "&cClose"
+    material: BARRIER
+    slot: 53
+    on-left-click:
+      - "[close]"
+  info:
+    name: "&aCollections"
+    material: PAINTING
+    slot: 4
+    lore:
+      - ""
+      - "&7View all of the items available"
+      - "&7in the server! Collect more of an item"
+      - "&7to unlock rewards!"

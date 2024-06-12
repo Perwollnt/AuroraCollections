@@ -1,0 +1,22 @@
+name: AuroraCollections
+version: '${version}'
+main: gg.auroramc.collections.AuroraCollections
+api-version: '1.19'
+depend: [ Aurora ]
+softdepend:
+  - WorldGuard
+  - AuroraLevels
+  - AuraSkills
+  - CustomFishing
+authors: [ erik_sz ]
+website: https://auroramc.gg
+
+permissions:
+  aurora.collections.use:
+    description: Allows the player to use the /collections command
+    default: true
+  aurora.collections.admin.*:
+    default: op
+    children:
+      - aurora.collections.admin.reload
+      - aurora.collections.admin.open

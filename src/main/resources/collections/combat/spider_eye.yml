@@ -1,0 +1,31 @@
+triggers: [ entity_loot ]
+types:
+  - "minecraft:spider_eye"
+
+name: "Spider eye"
+
+menu-item:
+  name: "&e{collection_name} {prev_level}"
+  material: SPIDER_EYE
+  lore:
+    - "&7View all you {collection_name} Collection"
+    - "&7progress and rewards!"
+    - ""
+    - "&7Progress to {collection_name} {level}: &e{progress_percent}&6%"
+    - "&r{progressbar} &e{current_formatted}&6/&e{required_formatted}"
+    - ""
+    - "&7Total collected: &e{total_formatted}"
+
+# This defines the levels
+# To reach level 1, you need 50
+# To reach level 2, you need 100 and so on
+requirements:
+  - 50
+  - 100
+  - 250
+  - 1000
+  - 2500
+  - 5000
+  - 10000
+
+use-global-level-matchers: true
