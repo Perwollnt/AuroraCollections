@@ -3,11 +3,11 @@ types:
   - "minecraft:quartz"
   - "minecraft:nether_quartz_ore"
 
-name: "Redstone"
+name: "Quartz"
 
 menu-item:
   name: "&e{collection_name} {prev_level}"
-  material: REDSTONE
+  material: QUARTZ
   lore:
     - "&7View all you {collection_name} Collection"
     - "&7progress and rewards!"
