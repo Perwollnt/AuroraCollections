@@ -1,6 +1,7 @@
 package gg.auroramc.collections.collection;
 
 import com.google.common.collect.Maps;
+import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.dependency.Dep;
 import gg.auroramc.aurora.api.dependency.DependencyManager;
 import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
@@ -51,7 +52,7 @@ public class CollectionManager implements Listener {
             AuroraCollections.logger().info("Hooked into AuraSkills for handling extra loot drops");
         }
 
-        if(DependencyManager.hasDep(Dep.MYTHICMOBS)) {
+        if (DependencyManager.hasDep(Dep.MYTHICMOBS)) {
             Bukkit.getPluginManager().registerEvents(new MythicMobsListener(plugin), plugin);
             AuroraCollections.logger().info("Hooked into MythicMobs for entity_kill and entity_loot collections with namespace 'mythicmobs'");
         }
@@ -70,7 +71,9 @@ public class CollectionManager implements Listener {
     }
 
     public void progressCollections(Player player, Trigger trigger, TypeId type, int amount) {
-        if(plugin.getConfigManager().getConfig().getPreventCreativeMode() && player.getGameMode() == GameMode.CREATIVE) return;
+        if (plugin.getConfigManager().getConfig().getPreventCreativeMode() && player.getGameMode() == GameMode.CREATIVE)
+            return;
+        if (!AuroraAPI.getUserManager().getUser(player).isLoaded()) return;
 
         for (var category : categories.values()) {
             for (var collection : category.values()) {
