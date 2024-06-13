@@ -55,9 +55,22 @@ public class ProgressionMenu {
             new CategoryMenu(player, plugin).open();
         });
 
-        menu.addItem(ItemBuilder.of(collection.getConfig().getMenuItem())
+        var iconBuilder = ItemBuilder.of(collection.getConfig().getMenuItem())
                 .placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1))
-                .defaultSlot(4).build(player));
+                .defaultSlot(4);
+
+        var template = config.getCollectionMenuTemplate();
+
+        if (template.getEnabled()) {
+            if (template.getName() != null) {
+                iconBuilder.setName(template.getName());
+            }
+            if (template.getLore() != null) {
+                iconBuilder.setLore(template.getLore());
+            }
+        }
+
+        menu.addItem(iconBuilder.build(player));
 
         var requirements = getPage(page, config.getDisplayArea().size());
 
@@ -95,7 +108,7 @@ public class ProgressionMenu {
                     .loreCompute(() -> lore.stream().map(l -> Text.component(player, l, placeholders)).toList())
                     .placeholder(placeholders);
 
-            if(config.getAllowItemAmounts()) {
+            if (config.getAllowItemAmounts()) {
                 builder.amount(level);
             }
 

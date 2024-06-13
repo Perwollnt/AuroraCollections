@@ -19,9 +19,17 @@ public class CollectionMenuConfig extends AuroraConfig {
     private Items items;
     private Boolean allowItemAmounts = false;
     private Boolean forceRomanNumerals = false;
+    private ItemTemplate collectionMenuTemplate;
 
     public CollectionMenuConfig(AuroraCollections plugin) {
         super(getFile(plugin));
+    }
+
+    @Getter
+    public static final class ItemTemplate {
+        private String name;
+        private List<String> lore;
+        private Boolean enabled = true;
     }
 
     @Getter

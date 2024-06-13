@@ -36,6 +36,7 @@ public class CollectionsMenu {
 
     private AuroraMenu createMenu() {
         var config = plugin.getConfigManager().getCollectionListMenuConfig();
+        var cConfig = plugin.getConfigManager().getCollectionMenuConfig();
         var categories = plugin.getConfigManager().getCategoriesConfig().getCategories();
 
         var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId, Placeholder.of("{category}", categories.get(category)));
@@ -71,13 +72,23 @@ public class CollectionsMenu {
             }
 
             var collection = collections.get(i);
+            var template = cConfig.getCollectionMenuTemplate();
 
-            menu.addItem(ItemBuilder.of(collection.getConfig().getMenuItem())
-                            .slot(slot).placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1))
-                            .build(player),
-                    (e) -> {
-                        new ProgressionMenu(player, plugin, collection).open();
-                    });
+            var builder = ItemBuilder.of(collection.getConfig().getMenuItem())
+                    .slot(slot).placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1));
+
+            if (template.getEnabled()) {
+                if (template.getName() != null) {
+                    builder.setName(template.getName());
+                }
+                if (template.getLore() != null) {
+                    builder.setLore(template.getLore());
+                }
+            }
+
+            menu.addItem(builder.build(player), (e) -> {
+                new ProgressionMenu(player, plugin, collection).open();
+            });
         }
 
         var pageCount = getTotalPageCount(config.getDisplayArea().size());

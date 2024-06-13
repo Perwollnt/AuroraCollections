@@ -24,6 +24,19 @@ display-components:
     title: "&7Rewards:&r"
     line: "  {reward}"
 
+collection-menu-template:
+  enabled: true
+  # {prev_level} is correct here since the placeholders will be replaced with the next level
+  name: "&e{collection_name} {prev_level}"
+  lore:
+    - "&7View all your {collection_name} Collection"
+    - "&7progress and rewards!"
+    - ""
+    - "&7Progress to {collection_name} {level}: &e{progress_percent}&6%"
+    - "&r{progressbar} &e{current_formatted}&6/&e{required_formatted}"
+    - ""
+    - "&7Total collected: &e{total_formatted}"
+
 items:
   filler:
     enabled: true
