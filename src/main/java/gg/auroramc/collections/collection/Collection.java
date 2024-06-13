@@ -1,12 +1,13 @@
 package gg.auroramc.collections.collection;
 
 import gg.auroramc.aurora.api.AuroraAPI;
+import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
+import gg.auroramc.aurora.api.levels.MatcherManager;
 import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.message.Text;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.api.data.CollectionData;
 import gg.auroramc.collections.api.event.CollectionLevelUpEvent;
-import gg.auroramc.collections.api.leveler.CollectionLevelMatcher;
 import gg.auroramc.collections.config.CollectionConfig;
 import gg.auroramc.collections.util.RomanNumber;
 import lombok.Getter;
@@ -16,14 +17,16 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class Collection {
     private final CollectionConfig config;
     private final String id;
     private final String category;
-    private final CollectionLevelMatcher levelMatcher;
+    private final MatcherManager levelMatcher;
     private final AuroraCollections plugin;
 
     public Collection(AuroraCollections plugin, CollectionConfig config, String category, String id) {
@@ -31,8 +34,20 @@ public class Collection {
         this.config = config;
         this.category = category;
         this.id = id;
-        this.levelMatcher = new CollectionLevelMatcher(plugin);
-        this.levelMatcher.reload(config);
+        this.levelMatcher = new MatcherManager(plugin.getCollectionManager().getRewardFactory());
+
+        var globalConfig = plugin.getConfigManager().getConfig();
+
+        Map<String, IntervalMatcherConfig> collectionMatchers = new LinkedHashMap<>();
+
+        if(config.getUseGlobalLevelMatchers()) {
+            collectionMatchers.putAll(globalConfig.getGlobalLevelMatchers());
+            collectionMatchers.putAll(config.getLevelMatchers());
+        } else {
+            collectionMatchers.putAll(config.getLevelMatchers());
+        }
+
+        levelMatcher.reload(collectionMatchers, config.getCustomLevels());
     }
 
     public int getPlayerLevel(Player player) {
@@ -78,12 +93,15 @@ public class Collection {
             var text = Component.text();
             var messageLines = mainConfig.getLevelUpMessage().getMessage();
 
+            var rewards = matcher.computeRewards(i);
+
             for (var line : messageLines) {
                 if (line.equals("component:rewards")) {
-                    if (!matcher.rewards().isEmpty()) {
+
+                    if (!rewards.isEmpty()) {
                         text.append(Text.component(player, mainConfig.getDisplayComponents().get("rewards").getTitle(), placeholders));
                     }
-                    for (var reward : matcher.rewards()) {
+                    for (var reward : rewards) {
                         text.append(Component.newline());
                         var display = mainConfig.getDisplayComponents().get("rewards").getLine().replace("{reward}", reward.getDisplay(player, placeholders));
                         text.append(Text.component(player, display, placeholders));
@@ -96,7 +114,6 @@ public class Collection {
             }
 
 
-            var finalRewards = matcher.rewards();
             int finalI = i;
 
             Bukkit.getGlobalRegionScheduler().run(plugin,
@@ -110,7 +127,7 @@ public class Collection {
                             player.sendMessage(text);
                         }
 
-                        for (var reward : finalRewards) {
+                        for (var reward : rewards) {
                             reward.execute(player, newLevel, placeholders);
                         }
                         Bukkit.getPluginManager().callEvent(new CollectionLevelUpEvent(player, this, finalI));

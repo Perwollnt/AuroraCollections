@@ -5,7 +5,6 @@ import gg.auroramc.aurora.api.AuroraLogger;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.collections.api.AuroraCollectionsProvider;
 import gg.auroramc.collections.api.data.CollectionData;
-import gg.auroramc.collections.api.reward.RewardAutoCorrector;
 import gg.auroramc.collections.collection.CollectionManager;
 import gg.auroramc.collections.command.CommandManager;
 import gg.auroramc.collections.config.ConfigManager;
@@ -43,20 +42,18 @@ public final class AuroraCollections extends JavaPlugin {
         commandManager = new CommandManager(this);
         commandManager.reload();
 
+        collectionManager = new CollectionManager(this);
+
         HookManager.registerHooks(this);
 
-        Bukkit.getGlobalRegionScheduler().run(this, (task) -> {
-            collectionManager = new CollectionManager(this);
-            collectionManager.reloadCollections();
-        });
+        Bukkit.getGlobalRegionScheduler().run(this, (task) -> collectionManager.reloadCollections());
 
         try {
             var field = AuroraCollectionsProvider.class.getDeclaredField("plugin");
             field.setAccessible(true);
             field.set(null, this);
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            l.severe("Failed to initialize api provider!");
-            e.printStackTrace();
+            l.severe("Failed to initialize api provider! error: " + e.getMessage());
         }
     }
 
@@ -75,7 +72,7 @@ public final class AuroraCollections extends JavaPlugin {
                     new CategoryMenu(player, this).open();
                 }
             }
-            RewardAutoCorrector.correctRewards(collectionManager, player);
+            collectionManager.getRewardAutoCorrector().correctRewards(player);
         });
     }
 

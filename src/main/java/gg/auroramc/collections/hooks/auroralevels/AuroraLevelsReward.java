@@ -1,7 +1,7 @@
 package gg.auroramc.collections.hooks.auroralevels;
 
 import gg.auroramc.aurora.api.message.Placeholder;
-import gg.auroramc.collections.api.reward.NumberReward;
+import gg.auroramc.aurora.api.reward.NumberReward;
 import gg.auroramc.levels.api.AuroraLevelsProvider;
 import org.bukkit.entity.Player;
 

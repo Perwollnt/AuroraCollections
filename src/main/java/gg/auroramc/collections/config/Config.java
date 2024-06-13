@@ -1,9 +1,9 @@
 package gg.auroramc.collections.config;
 
 import gg.auroramc.aurora.api.config.AuroraConfig;
+import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.collections.AuroraCollections;
 import lombok.Getter;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
 import java.util.List;
@@ -14,7 +14,7 @@ public class Config extends AuroraConfig {
     private Boolean debug = false;
     private String language = "en";
     private CommandAliasConfig commandAliases;
-    private Map<String, LevelMatcherConfig> globalLevelMatchers;
+    private Map<String, IntervalMatcherConfig> globalLevelMatchers;
     private LevelUpSound levelUpSound;
     private LevelUpMessage levelUpMessage;
     private Map<String, DisplayComponent> displayComponents;
@@ -27,13 +27,6 @@ public class Config extends AuroraConfig {
     @Getter
     public static final class CommandAliasConfig {
         private List<String> collections = List.of("collections");
-    }
-
-    @Getter
-    public static final class LevelMatcherConfig {
-        private Integer interval;
-        private Integer priority;
-        private ConfigurationSection rewards;
     }
 
     @Getter

@@ -1,8 +1,8 @@
 package gg.auroramc.collections.hooks.luckperms;
 
+import gg.auroramc.aurora.api.reward.PermissionReward;
+import gg.auroramc.aurora.api.reward.RewardCorrector;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.api.reward.RewardCorrector;
-import gg.auroramc.collections.collection.CollectionManager;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.node.NodeEqualityPredicate;
 import net.luckperms.api.util.Tristate;
@@ -11,17 +11,24 @@ import org.bukkit.entity.Player;
 import java.util.concurrent.CompletableFuture;
 
 public class PermissionCorrector implements RewardCorrector {
+    private final AuroraCollections plugin;
+
+    public PermissionCorrector(AuroraCollections plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
-    public void correctRewards(CollectionManager manager, Player player) {
+    public void correctRewards(Player player) {
         CompletableFuture.runAsync(() -> {
+            var manager = plugin.getCollectionManager();
             for (var collection : manager.getAllCollections()) {
                 var level = collection.getPlayerLevel(player);
 
-                for (long i = 1; i < level + 1; i++) {
+                for (int i = 1; i < level + 1; i++) {
                     var matcher = collection.getLevelMatcher().getBestMatcher(i);
                     if (matcher == null) continue;
                     var placeholders = collection.getPlaceholders(player, i);
-                    for (var reward : matcher.rewards()) {
+                    for (var reward : matcher.computeRewards(i)) {
                         if (reward instanceof PermissionReward permissionReward) {
                             if (permissionReward.getPermission() == null) continue;
                             var node = permissionReward.buildNode(player, placeholders);

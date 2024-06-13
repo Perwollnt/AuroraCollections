@@ -74,11 +74,12 @@ public class ProgressionMenu {
             var placeholders = collection.getPlaceholders(player, level);
 
             var lore = new ArrayList<String>();
+            var rewards = collection.getLevelMatcher().getBestMatcher(level).computeRewards(level);
 
             for (var line : itemConfig.getLore()) {
                 if (line.equals("component:rewards")) {
                     var display = config.getDisplayComponents().get("rewards");
-                    var rewards = collection.getLevelMatcher().getBestMatcher(level).rewards();
+
                     if (!rewards.isEmpty()) {
                         lore.add(display.getTitle());
                     }

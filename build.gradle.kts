@@ -36,8 +36,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
-    compileOnly("gg.auroramc:Aurora:1.2.0")
-    compileOnly("gg.auroramc:AuroraLevels:1.1.1")
+    compileOnly("gg.auroramc:Aurora:1.3.0-SNAPSHOT")
+    compileOnly("gg.auroramc:AuroraLevels:1.2.0-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("dev.aurelium:auraskills-api-bukkit:2.0.7")
     compileOnly("io.lumine:Mythic-Dist:5.6.1")

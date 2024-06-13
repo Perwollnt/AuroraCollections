@@ -2,15 +2,18 @@ package gg.auroramc.collections.hooks.auraskills;
 
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.api.reward.RewardAutoCorrector;
-import gg.auroramc.collections.api.reward.RewardFactory;
 import gg.auroramc.collections.hooks.Hook;
 
 public class AuraSkillsHook implements Hook {
     @Override
     public void hook(AuroraCollections plugin) {
-        RewardFactory.registerRewardType(NamespacedId.fromDefault("auraskills_stat"), AuraSkillsStatReward.class);
-        RewardAutoCorrector.registerCorrector(NamespacedId.fromDefault("auraskills_stat"), new AuraSkillsCorrector(plugin));
+
+        plugin.getCollectionManager().getRewardFactory()
+                .registerRewardType(NamespacedId.fromDefault("auraskills_stat"), AuraSkillsStatReward.class);
+
+        plugin.getCollectionManager().getRewardAutoCorrector()
+                .registerCorrector(NamespacedId.fromDefault("auraskills_stat"), new AuraSkillsCorrector(plugin));
+
         AuroraCollections.logger().info("Hooked into AuraSkills for stat rewards with reward type: 'auraskills_stat'. Auto reward corrector for stats is registered.");
     }
 }

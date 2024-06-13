@@ -2,6 +2,8 @@ package gg.auroramc.collections.config;
 
 import gg.auroramc.aurora.api.config.AuroraConfig;
 import gg.auroramc.aurora.api.config.decorators.IgnoreField;
+import gg.auroramc.aurora.api.config.premade.ConcreteMatcherConfig;
+import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.aurora.api.config.premade.ItemConfig;
 import gg.auroramc.collections.collection.Trigger;
 import gg.auroramc.collections.collection.TypeId;
@@ -21,8 +23,8 @@ public class CollectionConfig extends AuroraConfig {
     private String name;
     private List<Integer> requirements;
     private Boolean useGlobalLevelMatchers;
-    private Map<String, Config.LevelMatcherConfig> levelMatchers;
-    private Map<Integer, CustomLevel> customLevels;
+    private Map<String, IntervalMatcherConfig> levelMatchers;
+    private Map<String, ConcreteMatcherConfig> customLevels;
     private ItemConfig menuItem;
 
     @IgnoreField

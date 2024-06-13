@@ -5,14 +5,15 @@ import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.dependency.Dep;
 import gg.auroramc.aurora.api.dependency.DependencyManager;
 import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
+import gg.auroramc.aurora.api.reward.CommandReward;
+import gg.auroramc.aurora.api.reward.MoneyReward;
+import gg.auroramc.aurora.api.reward.RewardAutoCorrector;
+import gg.auroramc.aurora.api.reward.RewardFactory;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.api.reward.RewardAutoCorrector;
-import gg.auroramc.collections.api.reward.RewardFactory;
 import gg.auroramc.collections.listener.*;
-import gg.auroramc.collections.reward.CommandReward;
-import gg.auroramc.collections.reward.MoneyReward;
 import gg.auroramc.collections.reward.corrector.CommandCorrector;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -25,14 +26,18 @@ import java.util.Map;
 public class CollectionManager implements Listener {
     private final AuroraCollections plugin;
     private final Map<String, Map<String, Collection>> categories = Maps.newConcurrentMap();
+    @Getter
+    private final RewardFactory rewardFactory = new RewardFactory();
+    @Getter
+    private final RewardAutoCorrector rewardAutoCorrector = new RewardAutoCorrector();
 
     public CollectionManager(AuroraCollections plugin) {
         this.plugin = plugin;
 
-        RewardFactory.registerRewardType(NamespacedId.fromDefault("command"), CommandReward.class);
-        RewardFactory.registerRewardType(NamespacedId.fromDefault("money"), MoneyReward.class);
+        rewardFactory.registerRewardType(NamespacedId.fromDefault("command"), CommandReward.class);
+        rewardFactory.registerRewardType(NamespacedId.fromDefault("money"), MoneyReward.class);
 
-        RewardAutoCorrector.registerCorrector(NamespacedId.fromDefault("command"), new CommandCorrector(plugin));
+        rewardAutoCorrector.registerCorrector(NamespacedId.fromDefault("command"), new CommandCorrector(plugin));
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
         Bukkit.getPluginManager().registerEvents(new BlockBreakListener(plugin), plugin);
@@ -98,6 +103,6 @@ public class CollectionManager implements Listener {
 
     @EventHandler
     public void onUserLoaded(AuroraUserLoadedEvent e) {
-        RewardAutoCorrector.correctRewards(this, e.getUser().getPlayer());
+        rewardAutoCorrector.correctRewards(e.getUser().getPlayer());
     }
 }

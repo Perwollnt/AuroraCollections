@@ -1,10 +1,9 @@
 package gg.auroramc.collections.reward.corrector;
 
 import gg.auroramc.aurora.api.message.Placeholder;
+import gg.auroramc.aurora.api.reward.CommandReward;
+import gg.auroramc.aurora.api.reward.RewardCorrector;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.api.reward.RewardCorrector;
-import gg.auroramc.collections.collection.CollectionManager;
-import gg.auroramc.collections.reward.CommandReward;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -23,19 +22,19 @@ public class CommandCorrector implements RewardCorrector {
     private static record CommandPair(CommandReward reward, List<Placeholder<?>> placeholders) {}
 
     @Override
-    public void correctRewards(CollectionManager manager, Player player) {
+    public void correctRewards(Player player) {
         CompletableFuture.runAsync(() -> {
-
-            final var rewards = new HashMap<Long, CommandPair>();
+            var manager = plugin.getCollectionManager();
+            final var rewards = new HashMap<Integer, CommandPair>();
 
             for(var collection : manager.getAllCollections()) {
                 var level = collection.getPlayerLevel(player);
 
-                for (long i = 1; i < level + 1; i++) {
+                for (int i = 1; i < level + 1; i++) {
                     var matcher = collection.getLevelMatcher().getBestMatcher(i);
                     if (matcher == null) continue;
 
-                    for (var reward : matcher.rewards()) {
+                    for (var reward : matcher.computeRewards(i)) {
                         if (reward instanceof CommandReward commandReward) {
                             if (commandReward.shouldBeCorrected(player, i)) {
                                 rewards.put(i, new CommandPair(commandReward, collection.getPlaceholders(player, i)));

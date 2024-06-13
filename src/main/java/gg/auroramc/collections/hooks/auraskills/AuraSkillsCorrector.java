@@ -4,9 +4,8 @@ import com.google.common.collect.Maps;
 import dev.aurelium.auraskills.api.AuraSkillsApi;
 import dev.aurelium.auraskills.api.stat.Stat;
 import dev.aurelium.auraskills.api.stat.StatModifier;
+import gg.auroramc.aurora.api.reward.RewardCorrector;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.api.reward.RewardCorrector;
-import gg.auroramc.collections.collection.CollectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -21,8 +20,9 @@ public class AuraSkillsCorrector implements RewardCorrector {
     }
 
     @Override
-    public void correctRewards(CollectionManager manager, Player player) {
+    public void correctRewards(Player player) {
         CompletableFuture.runAsync(() -> {
+            var manager = plugin.getCollectionManager();
             Map<Stat, Double> statMap = Maps.newHashMap();
 
             // Reset all stat modifiers first
@@ -34,11 +34,11 @@ public class AuraSkillsCorrector implements RewardCorrector {
             for(var collection : manager.getAllCollections()) {
                 var level = collection.getPlayerLevel(player);
 
-                for (long i = 1; i < level + 1; i++) {
+                for (int i = 1; i < level + 1; i++) {
                     var matcher = collection.getLevelMatcher().getBestMatcher(i);
                     if (matcher == null) continue;
                     var placeholders = collection.getPlaceholders(player, i);
-                    for (var reward : matcher.rewards()) {
+                    for (var reward : matcher.computeRewards(i)) {
                         if (reward instanceof AuraSkillsStatReward statReward) {
                             statMap.merge(statReward.getStat(), statReward.getValue(placeholders), Double::sum);
                         }
