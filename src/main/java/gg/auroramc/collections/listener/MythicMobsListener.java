@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.concurrent.CompletableFuture;
 
 public class MythicMobsListener implements Listener {
     private final AuroraCollections plugin;
@@ -26,22 +25,20 @@ public class MythicMobsListener implements Listener {
         var mobName = e.getMob().getType().getInternalName();
         var drops = e.getDrops();
 
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            var itemManager = MythicBukkit.inst().getItemManager();
+        var manager = plugin.getCollectionManager();
+        var itemManager = MythicBukkit.inst().getItemManager();
 
-            manager.progressCollections(player, Trigger.ENTITY_KILL, new TypeId("mythicmobs", mobName), 1);
+        manager.progressCollections(player, new TypeId("mythicmobs", mobName), 1, Trigger.ENTITY_KILL);
 
-            for (var drop : drops) {
-                if(itemManager.isMythicItem(drop)) {
-                    var mythicType = itemManager.getMythicTypeFromItem(drop);
-                    if(mythicType != null) {
-                        manager.progressCollections(player, Trigger.ENTITY_LOOT, new TypeId("mythicmobs", mythicType), drop.getAmount());
-                    }
-                } else {
-                    manager.progressCollections(player, Trigger.ENTITY_LOOT, TypeId.from(drop.getType()), drop.getAmount());
+        for (var drop : drops) {
+            if (itemManager.isMythicItem(drop)) {
+                var mythicType = itemManager.getMythicTypeFromItem(drop);
+                if (mythicType != null) {
+                    manager.progressCollections(player, new TypeId("mythicmobs", mythicType), drop.getAmount(), Trigger.ENTITY_LOOT);
                 }
+            } else {
+                manager.progressCollections(player, TypeId.from(drop.getType()), drop.getAmount(), Trigger.ENTITY_LOOT);
             }
-        });
+        }
     }
 }

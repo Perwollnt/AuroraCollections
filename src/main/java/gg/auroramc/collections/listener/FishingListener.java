@@ -9,8 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 
-import java.util.concurrent.CompletableFuture;
-
 
 public class FishingListener implements Listener {
     private final AuroraCollections plugin;
@@ -27,9 +25,7 @@ public class FishingListener implements Listener {
         var type = item.getItemStack().getType();
         var amount = item.getItemStack().getAmount();
 
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            manager.progressCollections(e.getPlayer(), Trigger.FISH, TypeId.from(type), amount);
-        });
+        var manager = plugin.getCollectionManager();
+        manager.progressCollections(e.getPlayer(), TypeId.from(type), amount, Trigger.FISH);
     }
 }

@@ -31,6 +31,7 @@ repositories {
     maven("https://repo.auroramc.gg/repository/maven-public/")
     maven("https://repo.aikar.co/content/groups/aikar/")
     maven("https://mvn.lumine.io/repository/maven-public/")
+    maven("https://maven.enginehub.org/repo/")
     maven("https://jitpack.io/")
 }
 
@@ -42,6 +43,7 @@ dependencies {
     compileOnly("dev.aurelium:auraskills-api-bukkit:2.0.7")
     compileOnly("io.lumine:Mythic-Dist:5.6.1")
     compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.1.2")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 

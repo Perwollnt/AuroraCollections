@@ -11,6 +11,8 @@ import gg.auroramc.aurora.api.reward.RewardAutoCorrector;
 import gg.auroramc.aurora.api.reward.RewardFactory;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
+import gg.auroramc.collections.hooks.HookManager;
+import gg.auroramc.collections.hooks.worldguard.WorldGuardHook;
 import gg.auroramc.collections.listener.*;
 import gg.auroramc.collections.reward.corrector.CommandCorrector;
 import lombok.Getter;
@@ -20,8 +22,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class CollectionManager implements Listener {
     private final AuroraCollections plugin;
@@ -75,18 +79,24 @@ public class CollectionManager implements Listener {
         return categories.get(category).get(name);
     }
 
-    public void progressCollections(Player player, Trigger trigger, TypeId type, int amount) {
+    public void progressCollections(Player player, TypeId type, int amount, Trigger... triggers) {
         if (plugin.getConfigManager().getConfig().getPreventCreativeMode() && player.getGameMode() == GameMode.CREATIVE)
             return;
         if (!AuroraAPI.getUserManager().getUser(player).isLoaded()) return;
 
-        for (var category : categories.values()) {
-            for (var collection : category.values()) {
-                if (collection.getConfig().getParsedTriggers().contains(trigger)) {
-                    collection.progress(player, type, amount);
+        if (HookManager.isEnabled(WorldGuardHook.class)) {
+            if (HookManager.getHook(WorldGuardHook.class).isBlocked(player, player.getLocation())) return;
+        }
+
+        CompletableFuture.runAsync(() -> {
+            for (var category : categories.values()) {
+                for (var collection : category.values()) {
+                    if (Arrays.stream(triggers).anyMatch(trigger -> collection.getConfig().getParsedTriggers().contains(trigger))) {
+                        collection.progress(player, type, amount);
+                    }
                 }
             }
-        }
+        });
     }
 
     public void reloadCollections() {

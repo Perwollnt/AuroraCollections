@@ -9,8 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import java.util.concurrent.CompletableFuture;
-
 
 public class EntityKillListener implements Listener {
     private final AuroraCollections plugin;
@@ -26,13 +24,11 @@ public class EntityKillListener implements Listener {
         if (e.getEntity() instanceof Player) return;
         var drops = e.getDrops();
 
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            manager.progressCollections(killer, Trigger.ENTITY_KILL, TypeId.from(e.getEntity().getType()), 1);
+        var manager = plugin.getCollectionManager();
+        manager.progressCollections(killer, TypeId.from(e.getEntity().getType()), 1, Trigger.ENTITY_KILL);
 
-            for (var drop : drops) {
-                manager.progressCollections(killer, Trigger.ENTITY_LOOT, TypeId.from(drop.getType()), drop.getAmount());
-            }
-        });
+        for (var drop : drops) {
+            manager.progressCollections(killer, TypeId.from(drop.getType()), drop.getAmount(), Trigger.ENTITY_LOOT);
+        }
     }
 }

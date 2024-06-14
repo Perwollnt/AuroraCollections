@@ -36,7 +36,7 @@ public class ProgressCollectionMechanic implements ITargetedEntitySkill {
         if (!target.isPlayer()) return SkillResult.INVALID_TARGET;
         Player player = BukkitAdapter.adapt(target.asPlayer());
 
-        plugin.getCollectionManager().progressCollections(player, trigger, typeId, amount.get(skillMetadata));
+        plugin.getCollectionManager().progressCollections(player, typeId, amount.get(skillMetadata), trigger);
 
         return SkillResult.SUCCESS;
     }

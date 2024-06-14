@@ -12,7 +12,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerHarvestBlockEvent;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class HarvestingListener implements Listener {
     private final AuroraCollections plugin;
@@ -27,12 +26,10 @@ public class HarvestingListener implements Listener {
         // This event will only be called for right click harvestable crops
         var harvested = e.getItemsHarvested();
 
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            for (var item : harvested) {
-                manager.progressCollections(e.getPlayer(), Trigger.HARVEST, TypeId.from(item.getType()), item.getAmount());
-            }
-        });
+        var manager = plugin.getCollectionManager();
+        for (var item : harvested) {
+            manager.progressCollections(e.getPlayer(), TypeId.from(item.getType()), item.getAmount(), Trigger.HARVEST);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -43,12 +40,10 @@ public class HarvestingListener implements Listener {
             if (ageable.getAge() != ageable.getMaximumAge()) return;
             var drops = e.getBlock().getDrops(e.getPlayer().getInventory().getItemInMainHand());
 
-            CompletableFuture.runAsync(() -> {
-                var manager = plugin.getCollectionManager();
-                for (var drop : drops) {
-                    manager.progressCollections(e.getPlayer(), Trigger.HARVEST, TypeId.from(drop.getType()), drop.getAmount());
-                }
-            });
+            var manager = plugin.getCollectionManager();
+            for (var drop : drops) {
+                manager.progressCollections(e.getPlayer(), TypeId.from(drop.getType()), drop.getAmount(), Trigger.HARVEST);
+            }
         }
     }
 }

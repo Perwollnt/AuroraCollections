@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.util.concurrent.CompletableFuture;
 
 public class PlayerKillListener implements Listener {
     private final AuroraCollections plugin;
@@ -21,10 +20,8 @@ public class PlayerKillListener implements Listener {
         if (killer == null) return;
         if (e.getEntity().equals(e.getEntity().getKiller())) return;
 
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            manager.progressCollections(killer, Trigger.PLAYER_KILL, null, 1);
-        });
+        var manager = plugin.getCollectionManager();
+        manager.progressCollections(killer, null, 1, Trigger.PLAYER_KILL);
     }
 }
 

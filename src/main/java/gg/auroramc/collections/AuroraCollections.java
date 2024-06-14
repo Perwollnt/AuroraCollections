@@ -32,10 +32,15 @@ public final class AuroraCollections extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+        l = AuroraAPI.createLogger("AuroraCollections", () -> configManager != null && configManager.getConfig().getDebug());
+        HookManager.loadHooks(this);
+    }
+
+    @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
 
-        l = AuroraAPI.createLogger("AuroraCollections", () -> configManager.getConfig().getDebug());
         AuroraAPI.getUserManager().registerUserDataHolder(CollectionData.class);
         AuroraAPI.registerPlaceholderHandler(new CollectionsPlaceholderHandler(this));
 
@@ -44,7 +49,7 @@ public final class AuroraCollections extends JavaPlugin {
 
         collectionManager = new CollectionManager(this);
 
-        HookManager.registerHooks(this);
+        HookManager.enableHooks(this);
 
         Bukkit.getGlobalRegionScheduler().run(this, (task) -> collectionManager.reloadCollections());
 

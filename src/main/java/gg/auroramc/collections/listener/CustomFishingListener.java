@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class CustomFishingListener implements Listener {
     private final AuroraCollections plugin;
@@ -47,9 +46,7 @@ public class CustomFishingListener implements Listener {
 
         TypeId finalItemId = itemId;
 
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            manager.progressCollections(player, Trigger.FISH, finalItemId, quantity);
-        });
+        var manager = plugin.getCollectionManager();
+        manager.progressCollections(player, finalItemId, quantity, Trigger.FISH);
     }
 }
