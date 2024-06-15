@@ -53,6 +53,8 @@ public class AddToCollectionMechanic implements ITargetedEntitySkill {
         data.getCache().computeIfAbsent(category, (k) -> Maps.newConcurrentMap())
                 .merge(collection, ((Integer) amount.get(skillMetadata)).longValue(), Long::sum);
 
+        data.setDirty();
+
         return SkillResult.SUCCESS;
     }
 }
