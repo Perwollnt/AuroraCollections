@@ -80,6 +80,7 @@ public class CollectionManager implements Listener {
     }
 
     public void progressCollections(Player player, TypeId type, int amount, Trigger... triggers) {
+        if (!player.hasPermission("aurora.collections.use")) return;
         if (plugin.getConfigManager().getConfig().getPreventCreativeMode() && player.getGameMode() == GameMode.CREATIVE)
             return;
         if (!AuroraAPI.getUserManager().getUser(player).isLoaded()) return;
