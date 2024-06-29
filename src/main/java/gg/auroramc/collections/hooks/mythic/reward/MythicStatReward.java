@@ -1,10 +1,13 @@
-package gg.auroramc.levels.hooks.mythic.reward;
+package gg.auroramc.collections.hooks.mythic.reward;
 
 import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.reward.NumberReward;
-import gg.auroramc.levels.AuroraLevels;
+import gg.auroramc.collections.AuroraCollections;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import io.lumine.mythic.core.skills.stats.*;
+import io.lumine.mythic.core.skills.stats.StatModifierType;
+import io.lumine.mythic.core.skills.stats.StatRegistry;
+import io.lumine.mythic.core.skills.stats.StatSource;
+import io.lumine.mythic.core.skills.stats.StatType;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -14,7 +17,7 @@ import java.util.List;
 @Getter
 public class MythicStatReward extends NumberReward {
     @Getter
-    private static final StatSource source = new AuroraStatSource();
+    private static final StatSource source = new AuroraCollectionsStatSource();
 
     private StatType statType;
     private StatModifierType modifierType;
@@ -51,7 +54,7 @@ public class MythicStatReward extends NumberReward {
 
         if (stat == null) {
             this.valid = false;
-            AuroraLevels.logger().warning("Stat is not defined in MythicStatReward");
+            AuroraCollections.logger().warning("Stat is not defined in MythicStatReward");
             return;
         }
 
@@ -59,13 +62,13 @@ public class MythicStatReward extends NumberReward {
 
         if (statType == null) {
             this.valid = false;
-            AuroraLevels.logger().warning("Invalid stat: " + stat + " in MythicStatReward");
+            AuroraCollections.logger().warning("Invalid stat: " + stat + " in MythicStatReward");
             return;
         }
 
         if (!statType.isEnabled()) {
             this.valid = false;
-            AuroraLevels.logger().warning("Stat: " + stat + " is not enabled in MythicMobs. Cannot create MythicStatReward.");
+            AuroraCollections.logger().warning("Stat: " + stat + " is not enabled in MythicMobs. Cannot create MythicStatReward.");
             return;
         }
 
@@ -75,7 +78,7 @@ public class MythicStatReward extends NumberReward {
             this.modifierType = StatModifierType.valueOf(modifier.toUpperCase());
         } catch (IllegalArgumentException e) {
             this.valid = false;
-            AuroraLevels.logger().warning("Invalid modifier type: " + modifier + " in MythicStatReward");
+            AuroraCollections.logger().warning("Invalid modifier type: " + modifier + " in MythicStatReward");
         }
     }
 

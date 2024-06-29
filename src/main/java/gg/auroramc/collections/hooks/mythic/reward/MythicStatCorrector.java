@@ -1,8 +1,8 @@
-package gg.auroramc.levels.hooks.mythic.reward;
+package gg.auroramc.collections.hooks.mythic.reward;
 
 import com.google.common.collect.Maps;
 import gg.auroramc.aurora.api.reward.RewardCorrector;
-import gg.auroramc.levels.AuroraLevels;
+import gg.auroramc.collections.AuroraCollections;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.skills.stats.StatModifierType;
 import io.lumine.mythic.core.skills.stats.StatType;
@@ -12,18 +12,16 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class MythicStatCorrector implements RewardCorrector {
-    private final AuroraLevels plugin;
+    private final AuroraCollections plugin;
 
-    public MythicStatCorrector(AuroraLevels plugin) {
+    public MythicStatCorrector(AuroraCollections plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public void correctRewards(Player player) {
         CompletableFuture.runAsync(() -> {
-            var leveler = plugin.getLeveler();
-            var data = leveler.getUserData(player);
-            var level = data.getLevel();
+            var manager = plugin.getCollectionManager();
             var mythic = MythicBukkit.inst();
             var registry = mythic.getPlayerManager().getProfile(player).getStatRegistry();
 
@@ -36,14 +34,18 @@ public class MythicStatCorrector implements RewardCorrector {
                     });
 
             // Gather new stat modifiers
-            for (int i = 1; i < level + 1; i++) {
-                var matcher = leveler.getLevelMatcher().getBestMatcher(i);
-                if (matcher == null) continue;
-                var formulaPlaceholders = leveler.getRewardFormulaPlaceholders(player, i);
-                for (var reward : matcher.computeRewards(i)) {
-                    if (reward instanceof MythicStatReward statReward && statReward.isValid()) {
-                        statMap.computeIfAbsent(statReward.getStatType(), (key) -> Maps.newHashMap())
-                                .merge(statReward.getModifierType(), statReward.getValue(formulaPlaceholders), Double::sum);
+            for(var collection : manager.getAllCollections()) {
+                var level = collection.getPlayerLevel(player);
+
+                for (int i = 1; i < level + 1; i++) {
+                    var matcher = collection.getLevelMatcher().getBestMatcher(i);
+                    if (matcher == null) continue;
+                    var placeholders = collection.getPlaceholders(player, i);
+                    for (var reward : matcher.computeRewards(i)) {
+                        if (reward instanceof MythicStatReward statReward && statReward.isValid()) {
+                            statMap.computeIfAbsent(statReward.getStatType(), (key) -> Maps.newHashMap())
+                                    .merge(statReward.getModifierType(), statReward.getValue(placeholders), Double::sum);
+                        }
                     }
                 }
             }
@@ -54,7 +56,7 @@ public class MythicStatCorrector implements RewardCorrector {
                 for (var modifierEntry : entry.getValue().entrySet()) {
                     var modifierType = modifierEntry.getKey();
                     var value = modifierEntry.getValue();
-                    AuroraLevels.logger().debug("Adding stat " + statType.getKey() + " with value " + value + " to player " + player.getName());
+                    AuroraCollections.logger().debug("Adding stat " + statType.getKey() + " with value " + value + " to player " + player.getName());
                     registry.putValue(statType, MythicStatReward.getSource(), modifierType, value);
                 }
             }

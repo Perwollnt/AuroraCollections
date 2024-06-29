@@ -1,7 +1,10 @@
 package gg.auroramc.collections.hooks.mythic;
 
+import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.hooks.Hook;
+import gg.auroramc.collections.hooks.mythic.reward.MythicStatCorrector;
+import gg.auroramc.collections.hooks.mythic.reward.MythicStatReward;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import org.bukkit.event.EventHandler;
@@ -13,7 +16,15 @@ public class MythicHook implements Hook, Listener {
     @Override
     public void hook(AuroraCollections plugin) {
         this.registrar = new MythicRegistrar(plugin);
-        AuroraCollections.logger().info("Hooked into MythicMobs for custom mechanics (addToCollection, progressCollection) and conditions (hasCollectionLevel)");
+
+        plugin.getCollectionManager().getRewardFactory()
+                .registerRewardType(NamespacedId.fromDefault("mythic_stat"), MythicStatReward.class);
+
+        plugin.getCollectionManager().getRewardAutoCorrector()
+                        .registerCorrector(NamespacedId.fromDefault("mythic_stat"), new MythicStatCorrector(plugin));
+
+        AuroraCollections.logger()
+                .info("Hooked into MythicMobs for custom mechanics (addToCollection, progressCollection), conditions (hasCollectionLevel) and \"mythic_stat\" reward.");
     }
 
     @EventHandler
