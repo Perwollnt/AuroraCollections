@@ -2,16 +2,12 @@ package gg.auroramc.collections;
 
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.AuroraLogger;
-import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.collections.api.AuroraCollectionsProvider;
 import gg.auroramc.collections.api.data.CollectionData;
 import gg.auroramc.collections.collection.CollectionManager;
 import gg.auroramc.collections.command.CommandManager;
 import gg.auroramc.collections.config.ConfigManager;
 import gg.auroramc.collections.hooks.HookManager;
-import gg.auroramc.collections.menu.CategoryMenu;
-import gg.auroramc.collections.menu.CollectionsMenu;
-import gg.auroramc.collections.menu.ProgressionMenu;
 import gg.auroramc.collections.placeholder.CollectionsPlaceholderHandler;
 import lombok.Getter;
 import org.bukkit.Bukkit;
