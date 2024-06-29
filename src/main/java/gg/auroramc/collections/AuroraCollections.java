@@ -67,18 +67,7 @@ public final class AuroraCollections extends JavaPlugin {
         commandManager.reload();
         collectionManager.reloadCollections();
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            if (player.getOpenInventory().getTopInventory().getHolder() instanceof AuroraMenu menu) {
-                if (menu.getId().equals(CollectionsMenu.getMenuId())) {
-                    player.closeInventory();
-                } else if (menu.getId().equals(ProgressionMenu.getMenuId())) {
-                    player.closeInventory();
-                } else if (menu.getId().equals(CategoryMenu.getMenuId())) {
-                    new CategoryMenu(player, this).open();
-                }
-            }
-            collectionManager.getRewardAutoCorrector().correctRewards(player);
-        });
+        Bukkit.getOnlinePlayers().forEach(player -> collectionManager.getRewardAutoCorrector().correctRewards(player));
     }
 
     @Override
