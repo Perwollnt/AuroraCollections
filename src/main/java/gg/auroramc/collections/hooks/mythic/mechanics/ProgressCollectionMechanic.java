@@ -1,7 +1,6 @@
 package gg.auroramc.collections.hooks.mythic.mechanics;
 
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.collection.Trigger;
 import gg.auroramc.collections.collection.TypeId;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
@@ -20,14 +19,14 @@ import org.bukkit.entity.Player;
 )
 public class ProgressCollectionMechanic implements ITargetedEntitySkill {
     private final AuroraCollections plugin;
-    private final Trigger trigger;
+    private final String trigger;
     private final TypeId typeId;
     private final PlaceholderInt amount;
 
     public ProgressCollectionMechanic(AuroraCollections plugin, MythicMechanicLoadEvent loader) {
         this.plugin = plugin;
         this.amount = loader.getConfig().getPlaceholderInteger(new String[]{"amount", "a",}, 0);
-        this.trigger = Trigger.valueOf(loader.getConfig().getString(new String[]{"trigger", "t", }).toUpperCase());
+        this.trigger = loader.getConfig().getString(new String[]{"trigger", "t", }).toUpperCase();
         this.typeId = TypeId.fromDefault(loader.getConfig().getString(new String[]{"typeId", "type", "id"}));
     }
 

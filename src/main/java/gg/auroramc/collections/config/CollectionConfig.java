@@ -5,7 +5,6 @@ import gg.auroramc.aurora.api.config.decorators.IgnoreField;
 import gg.auroramc.aurora.api.config.premade.ConcreteMatcherConfig;
 import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.aurora.api.config.premade.ItemConfig;
-import gg.auroramc.collections.collection.Trigger;
 import gg.auroramc.collections.collection.TypeId;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -31,7 +30,7 @@ public class CollectionConfig extends AuroraConfig {
     private Set<TypeId> parsedTypes;
 
     @IgnoreField
-    private Set<Trigger> parsedTriggers;
+    private Set<String> parsedTriggers;
 
     @Getter
     public static final class CustomLevel {
@@ -46,6 +45,6 @@ public class CollectionConfig extends AuroraConfig {
     public void load() {
         super.load();
         parsedTypes = types.stream().map(TypeId::fromDefault).collect(Collectors.toSet());
-        parsedTriggers = triggers.stream().map(String::toUpperCase).map(Trigger::valueOf).collect(Collectors.toSet());
+        parsedTriggers = triggers.stream().map(String::toUpperCase).collect(Collectors.toSet());
     }
 }
