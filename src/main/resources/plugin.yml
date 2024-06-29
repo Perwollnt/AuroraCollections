@@ -8,6 +8,7 @@ softdepend:
   - AuroraLevels
   - AuraSkills
   - CustomFishing
+  - MythicMobs
 authors: [ erik_sz ]
 website: https://auroramc.gg
 
