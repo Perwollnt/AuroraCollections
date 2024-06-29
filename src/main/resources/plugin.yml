@@ -9,6 +9,7 @@ softdepend:
   - AuraSkills
   - CustomFishing
   - MythicMobs
+  - MythicLib
 authors: [ erik_sz ]
 website: https://auroramc.gg
 

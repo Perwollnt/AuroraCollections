@@ -33,6 +33,7 @@ repositories {
     maven("https://mvn.lumine.io/repository/maven-public/")
     maven("https://maven.enginehub.org/repo/")
     maven("https://jitpack.io/")
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
 }
 
 dependencies {
@@ -44,6 +45,7 @@ dependencies {
     compileOnly("io.lumine:Mythic-Dist:5.6.1")
     compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.1.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
+    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
