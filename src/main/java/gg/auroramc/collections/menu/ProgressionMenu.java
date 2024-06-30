@@ -52,7 +52,7 @@ public class ProgressionMenu {
         var items = config.getItems();
 
         menu.addItem(ItemBuilder.back(items.getBack()).build(player), (e) -> {
-            new CategoryMenu(player, plugin).open();
+            new CollectionsMenu(player, plugin, collection.getCategory()).open();
         });
 
         var iconBuilder = ItemBuilder.of(collection.getConfig().getMenuItem())
