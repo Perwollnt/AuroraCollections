@@ -28,7 +28,7 @@ public class CustomFishingListener implements Listener {
         var itemId = new TypeId("customfishing", e.getLoot().getID());
         var quantity = e.getAmount();
         var player = e.getPlayer();
-        var isVanillaLoot = itemId.equals("vanilla");
+        var isVanillaLoot = itemId.id().equals("vanilla");
 
         if (isVanillaLoot) {
             var manager = CustomFishingPlugin.get().getFishingManager();
@@ -44,9 +44,7 @@ public class CustomFishingListener implements Listener {
             }
         }
 
-        TypeId finalItemId = itemId;
-
         var manager = plugin.getCollectionManager();
-        manager.progressCollections(player, finalItemId, quantity, Trigger.FISH);
+        manager.progressCollections(player, itemId, quantity, Trigger.FISH);
     }
 }
