@@ -1,5 +1,6 @@
 package gg.auroramc.collections.hooks.mmoitems;
 
+import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
 import gg.auroramc.collections.collection.TypeId;
@@ -24,6 +25,7 @@ public class MMOItemsHook implements Hook, Listener {
     public void onCustomBlockBreak(ItemDropEvent event) {
         if (event.getCause() != ItemDropEvent.DropCause.CUSTOM_BLOCK) return;
         if (!(event.getWhoDropped() instanceof Player player)) return;
+        if (AuroraAPI.getRegionManager().isPlacedBlock(event.getMinedBlock())) return;
 
         for (var drop : event.getDrops()) {
             TypeId typeId;
