@@ -10,6 +10,7 @@ softdepend:
   - CustomFishing
   - MythicMobs
   - MythicLib
+  - MMOItems
 authors: [ erik_sz ]
 website: https://auroramc.gg
 

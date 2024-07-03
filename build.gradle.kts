@@ -46,6 +46,7 @@ dependencies {
     compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.1.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
+    compileOnly("net.Indyuce:MMOItems-API:6.10-SNAPSHOT")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 

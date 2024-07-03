@@ -4,6 +4,7 @@ import gg.auroramc.collections.hooks.auraskills.AuraSkillsHook;
 import gg.auroramc.collections.hooks.auroralevels.AuroraLevelsHook;
 import gg.auroramc.collections.hooks.customfishing.CustomFishingHook;
 import gg.auroramc.collections.hooks.luckperms.LuckPermsHook;
+import gg.auroramc.collections.hooks.mmoitems.MMOItemsHook;
 import gg.auroramc.collections.hooks.mmolib.MMOLibHook;
 import gg.auroramc.collections.hooks.mythic.MythicHook;
 import gg.auroramc.collections.hooks.worldguard.WorldGuardHook;
@@ -17,6 +18,7 @@ public enum Hooks {
     MYTHIC_MOBS(MythicHook.class, "MythicMobs"),
     WORLD_GUARD(WorldGuardHook.class, "WorldGuard"),
     CUSTOM_FISHING(CustomFishingHook.class, "CustomFishing"),
+    MMOITEMS(MMOItemsHook.class, "MMOItems"),
     MMOLIB(MMOLibHook.class, "MythicLib");
 
     private final Class<? extends Hook> clazz;
