@@ -1,4 +1,4 @@
-package gg.auroramc.collections.listener;
+package gg.auroramc.collections.hooks.mythic.listener;
 
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;

@@ -2,8 +2,6 @@ package gg.auroramc.collections.collection;
 
 import com.google.common.collect.Maps;
 import gg.auroramc.aurora.api.AuroraAPI;
-import gg.auroramc.aurora.api.dependency.Dep;
-import gg.auroramc.aurora.api.dependency.DependencyManager;
 import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
 import gg.auroramc.aurora.api.reward.CommandReward;
 import gg.auroramc.aurora.api.reward.MoneyReward;
@@ -50,21 +48,6 @@ public class CollectionManager implements Listener {
         Bukkit.getPluginManager().registerEvents(new HarvestingListener(plugin), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerKillListener(plugin), plugin);
         Bukkit.getPluginManager().registerEvents(new ShearListener(plugin), plugin);
-
-        if (DependencyManager.hasDep(Dep.CUSTOMFISHING)) {
-            Bukkit.getPluginManager().registerEvents(new CustomFishingListener(plugin), plugin);
-            AuroraCollections.logger().info("Hooked into CustomFishing for fishing collection with namespace 'customfishing'");
-        }
-
-        if (DependencyManager.hasDep(Dep.AURASKILLS)) {
-            Bukkit.getPluginManager().registerEvents(new AuraSkillsListener(plugin), plugin);
-            AuroraCollections.logger().info("Hooked into AuraSkills for handling extra loot drops");
-        }
-
-        if (DependencyManager.hasDep(Dep.MYTHICMOBS)) {
-            Bukkit.getPluginManager().registerEvents(new MythicMobsListener(plugin), plugin);
-            AuroraCollections.logger().info("Hooked into MythicMobs for entity_kill and entity_loot collections with namespace 'mythicmobs'");
-        }
     }
 
     public List<Collection> getAllCollections() {

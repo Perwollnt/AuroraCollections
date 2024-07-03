@@ -1,4 +1,4 @@
-package gg.auroramc.collections.listener;
+package gg.auroramc.collections.hooks.auraskills;
 
 import dev.aurelium.auraskills.api.event.loot.LootDropEvent;
 import gg.auroramc.collections.AuroraCollections;

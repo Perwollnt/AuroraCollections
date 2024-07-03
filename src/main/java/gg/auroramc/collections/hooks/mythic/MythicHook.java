@@ -3,10 +3,12 @@ package gg.auroramc.collections.hooks.mythic;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.hooks.Hook;
+import gg.auroramc.collections.hooks.mythic.listener.MythicMobsListener;
 import gg.auroramc.collections.hooks.mythic.reward.MythicStatCorrector;
 import gg.auroramc.collections.hooks.mythic.reward.MythicStatReward;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -23,6 +25,9 @@ public class MythicHook implements Hook, Listener {
         plugin.getCollectionManager().getRewardAutoCorrector()
                         .registerCorrector(NamespacedId.fromDefault("mythic_stat"), new MythicStatCorrector(plugin));
 
+        Bukkit.getPluginManager().registerEvents(new MythicMobsListener(plugin), plugin);
+
+        AuroraCollections.logger().info("Hooked into MythicMobs for entity_kill and entity_loot collections with namespace 'mythicmobs'");
         AuroraCollections.logger()
                 .info("Hooked into MythicMobs for custom mechanics (addToCollection, progressCollection), conditions (hasCollectionLevel) and \"mythic_stat\" reward.");
     }
