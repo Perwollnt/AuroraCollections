@@ -7,6 +7,7 @@ import gg.auroramc.collections.hooks.luckperms.LuckPermsHook;
 import gg.auroramc.collections.hooks.mmoitems.MMOItemsHook;
 import gg.auroramc.collections.hooks.mmolib.MMOLibHook;
 import gg.auroramc.collections.hooks.mythic.MythicHook;
+import gg.auroramc.collections.hooks.oraxen.OraxenHook;
 import gg.auroramc.collections.hooks.worldguard.WorldGuardHook;
 import lombok.Getter;
 
@@ -15,10 +16,11 @@ public enum Hooks {
     AURORA_LEVELS(AuroraLevelsHook.class, "AuroraLevels"),
     AURA_SKILLS(AuraSkillsHook.class, "AuraSkills"),
     LUCK_PERMS(LuckPermsHook.class, "LuckPerms"),
-    MYTHIC_MOBS(MythicHook.class, "MythicMobs"),
-    WORLD_GUARD(WorldGuardHook.class, "WorldGuard"),
     CUSTOM_FISHING(CustomFishingHook.class, "CustomFishing"),
     MMOITEMS(MMOItemsHook.class, "MMOItems"),
+    MYTHIC_MOBS(MythicHook.class, "MythicMobs"),
+    ORAXEN(OraxenHook.class, "Oraxen"),
+    WORLD_GUARD(WorldGuardHook.class, "WorldGuard"),
     MMOLIB(MMOLibHook.class, "MythicLib");
 
     private final Class<? extends Hook> clazz;

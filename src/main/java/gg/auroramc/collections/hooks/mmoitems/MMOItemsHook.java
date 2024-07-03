@@ -1,6 +1,7 @@
 package gg.auroramc.collections.hooks.mmoitems;
 
 import gg.auroramc.aurora.api.AuroraAPI;
+import gg.auroramc.aurora.api.dependency.Dep;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
 import gg.auroramc.collections.collection.TypeId;
@@ -18,6 +19,7 @@ public class MMOItemsHook implements Hook, Listener {
     @Override
     public void hook(AuroraCollections plugin) {
         this.plugin = plugin;
+        plugin.getItemManager().registerResolver(Dep.MMOITEMS, new MMOItemResolver());
         AuroraCollections.logger().info("[EXPERIMENTAL] Hooked into MMOItems for block loot collection with namespace 'mmoitems'.");
     }
 

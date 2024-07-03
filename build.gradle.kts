@@ -34,6 +34,7 @@ repositories {
     maven("https://maven.enginehub.org/repo/")
     maven("https://jitpack.io/")
     maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
+    maven("https://repo.oraxen.com/snapshots")
 }
 
 dependencies {
@@ -47,6 +48,7 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
     compileOnly("net.Indyuce:MMOItems-API:6.10-SNAPSHOT")
+    compileOnly("io.th0rgal:oraxen:2.0-SNAPSHOT")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
