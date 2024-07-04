@@ -21,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -87,8 +88,8 @@ public class CollectionManager implements Listener {
         categories.clear();
         var config = plugin.getConfigManager().getCollections();
         for (var category : config.entrySet()) {
-            var categoryMap = Maps.<String, Collection>newConcurrentMap();
-            for (var collection : category.getValue().entrySet()) {
+            var categoryMap = Maps.<String, Collection>newLinkedHashMap();
+            for (var collection : category.getValue().entrySet().stream().sorted(Map.Entry.comparingByKey()).toList()) {
                 categoryMap.put(collection.getKey(), new Collection(plugin, collection.getValue(), category.getKey(), collection.getKey()));
             }
             categories.put(category.getKey(), categoryMap);

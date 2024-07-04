@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 public class ConfigManager {
     private final AuroraCollections plugin;
     private Config config;
+    private MetaConfig metaConfig;
     private MessageConfig messageConfig;
     private CategoriesConfig categoriesConfig;
     private CategoriesMenuConfig categoriesMenuConfig;
@@ -42,6 +43,10 @@ public class ConfigManager {
         Config.saveDefault(plugin);
         config = new Config(plugin);
         config.load();
+
+        MetaConfig.saveDefault(plugin);
+        metaConfig = new MetaConfig(plugin);
+        metaConfig.load();
 
         MessageConfig.saveDefault(plugin, config.getLanguage());
         messageConfig = new MessageConfig(plugin, config.getLanguage());
