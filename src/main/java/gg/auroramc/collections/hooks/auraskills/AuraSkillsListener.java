@@ -1,9 +1,9 @@
 package gg.auroramc.collections.hooks.auraskills;
 
 import dev.aurelium.auraskills.api.event.loot.LootDropEvent;
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
-import gg.auroramc.collections.collection.TypeId;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

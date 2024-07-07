@@ -1,7 +1,7 @@
 package gg.auroramc.collections.hooks.mythic.mechanics;
 
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.collection.TypeId;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;

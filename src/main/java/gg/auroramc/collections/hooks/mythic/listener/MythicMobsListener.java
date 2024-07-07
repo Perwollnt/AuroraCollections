@@ -1,8 +1,8 @@
 package gg.auroramc.collections.hooks.mythic.listener;
 
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
-import gg.auroramc.collections.collection.TypeId;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

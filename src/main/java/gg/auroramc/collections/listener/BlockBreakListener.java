@@ -1,9 +1,9 @@
 package gg.auroramc.collections.listener;
 
 import gg.auroramc.aurora.api.events.region.RegionBlockBreakEvent;
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
-import gg.auroramc.collections.collection.TypeId;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

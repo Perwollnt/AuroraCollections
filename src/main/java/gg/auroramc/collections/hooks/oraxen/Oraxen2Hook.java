@@ -21,9 +21,8 @@ public class Oraxen2Hook implements Hook, Listener {
     @Override
     public void hook(AuroraCollections plugin) {
         this.plugin = plugin;
-        plugin.getItemManager().registerResolver("Oraxen", new OraxenItemResolver());
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        AuroraCollections.logger().info("[EXPERIMENTAL] Hooked into Oraxen 2 for collection progression with namespace 'oraxen'.");
+        AuroraCollections.logger().info("Hooked into Oraxen 2 for collection progression with namespace 'oraxen'.");
     }
 
     @EventHandler

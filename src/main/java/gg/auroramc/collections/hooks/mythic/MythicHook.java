@@ -1,6 +1,5 @@
 package gg.auroramc.collections.hooks.mythic;
 
-import gg.auroramc.aurora.api.dependency.Dep;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.hooks.Hook;
@@ -19,8 +18,6 @@ public class MythicHook implements Hook, Listener {
     @Override
     public void hook(AuroraCollections plugin) {
         this.registrar = new MythicRegistrar(plugin);
-
-        plugin.getItemManager().registerResolver(Dep.MYTHICMOBS, new MythicItemResolver());
 
         plugin.getCollectionManager().getRewardFactory()
                 .registerRewardType(NamespacedId.fromDefault("mythic_stat"), MythicStatReward.class);

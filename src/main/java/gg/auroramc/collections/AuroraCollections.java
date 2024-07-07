@@ -2,9 +2,9 @@ package gg.auroramc.collections;
 
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.AuroraLogger;
+import gg.auroramc.aurora.api.item.ItemManager;
 import gg.auroramc.collections.api.AuroraCollectionsProvider;
 import gg.auroramc.collections.api.data.CollectionData;
-import gg.auroramc.collections.api.item.ItemManager;
 import gg.auroramc.collections.collection.CollectionManager;
 import gg.auroramc.collections.command.CommandManager;
 import gg.auroramc.collections.config.ConfigManager;
@@ -40,7 +40,7 @@ public final class AuroraCollections extends JavaPlugin {
     @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
-        itemManager = new ItemManager();
+        itemManager = AuroraAPI.getItemManager();
 
         AuroraAPI.getUserManager().registerUserDataHolder(CollectionData.class);
         AuroraAPI.registerPlaceholderHandler(new CollectionsPlaceholderHandler(this));

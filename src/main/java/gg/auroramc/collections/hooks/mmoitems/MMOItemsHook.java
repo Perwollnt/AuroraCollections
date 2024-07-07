@@ -1,10 +1,9 @@
 package gg.auroramc.collections.hooks.mmoitems;
 
 import gg.auroramc.aurora.api.AuroraAPI;
-import gg.auroramc.aurora.api.dependency.Dep;
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
-import gg.auroramc.collections.collection.TypeId;
 import gg.auroramc.collections.hooks.Hook;
 import io.lumine.mythic.lib.api.item.NBTItem;
 import org.bukkit.entity.Player;
@@ -19,8 +18,7 @@ public class MMOItemsHook implements Hook, Listener {
     @Override
     public void hook(AuroraCollections plugin) {
         this.plugin = plugin;
-        plugin.getItemManager().registerResolver(Dep.MMOITEMS, new MMOItemResolver());
-        AuroraCollections.logger().info("[EXPERIMENTAL] Hooked into MMOItems for block loot collection with namespace 'mmoitems'.");
+        AuroraCollections.logger().info("Hooked into MMOItems for block loot collection with namespace 'mmoitems'.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

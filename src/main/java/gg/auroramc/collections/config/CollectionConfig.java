@@ -5,7 +5,7 @@ import gg.auroramc.aurora.api.config.decorators.IgnoreField;
 import gg.auroramc.aurora.api.config.premade.ConcreteMatcherConfig;
 import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.aurora.api.config.premade.ItemConfig;
-import gg.auroramc.collections.collection.TypeId;
+import gg.auroramc.aurora.api.item.TypeId;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 

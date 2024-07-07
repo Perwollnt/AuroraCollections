@@ -1,8 +1,8 @@
 package gg.auroramc.collections.listener;
 
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
-import gg.auroramc.collections.collection.TypeId;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

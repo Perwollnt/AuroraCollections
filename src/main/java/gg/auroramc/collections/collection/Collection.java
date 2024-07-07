@@ -2,6 +2,7 @@ package gg.auroramc.collections.collection;
 
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.aurora.api.levels.MatcherManager;
 import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.message.Text;

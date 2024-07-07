@@ -3,6 +3,7 @@ package gg.auroramc.collections.collection;
 import com.google.common.collect.Maps;
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.aurora.api.reward.CommandReward;
 import gg.auroramc.aurora.api.reward.MoneyReward;
 import gg.auroramc.aurora.api.reward.RewardAutoCorrector;
