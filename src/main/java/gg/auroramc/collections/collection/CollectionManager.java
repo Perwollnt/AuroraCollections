@@ -6,6 +6,7 @@ import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
 import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.aurora.api.reward.CommandReward;
 import gg.auroramc.aurora.api.reward.MoneyReward;
+import gg.auroramc.aurora.api.reward.ItemReward;
 import gg.auroramc.aurora.api.reward.RewardAutoCorrector;
 import gg.auroramc.aurora.api.reward.RewardFactory;
 import gg.auroramc.aurora.api.util.NamespacedId;
@@ -40,6 +41,7 @@ public class CollectionManager implements Listener {
 
         rewardFactory.registerRewardType(NamespacedId.fromDefault("command"), CommandReward.class);
         rewardFactory.registerRewardType(NamespacedId.fromDefault("money"), MoneyReward.class);
+        rewardFactory.registerRewardType(NamespacedId.fromDefault("item"), ItemReward.class);
 
         rewardAutoCorrector.registerCorrector(NamespacedId.fromDefault("command"), new CommandCorrector(plugin));
 
