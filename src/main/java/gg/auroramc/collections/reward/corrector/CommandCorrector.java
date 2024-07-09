@@ -19,7 +19,7 @@ public class CommandCorrector implements RewardCorrector {
         this.plugin = plugin;
     }
 
-    private static record CommandPair(CommandReward reward, List<Placeholder<?>> placeholders) {}
+    private record CommandPair(CommandReward reward, List<Placeholder<?>> placeholders) {}
 
     @Override
     public void correctRewards(Player player) {
