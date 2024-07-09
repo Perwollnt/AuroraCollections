@@ -2,6 +2,7 @@ package gg.auroramc.collections.api.event;
 
 import gg.auroramc.collections.collection.Collection;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -26,6 +27,7 @@ public class CollectionLevelUpEvent extends Event {
     private final long level;
 
     public CollectionLevelUpEvent(Player player, Collection collection, long level) {
+        super(!Bukkit.isPrimaryThread());
         this.player = player;
         this.collection = collection;
         this.level = level;

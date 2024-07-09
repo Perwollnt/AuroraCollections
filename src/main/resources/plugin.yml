@@ -2,6 +2,8 @@ name: AuroraCollections
 version: '${version}'
 main: gg.auroramc.collections.AuroraCollections
 api-version: '1.19'
+authors: [ erik_sz ]
+folia-supported: true
 depend: [ Aurora ]
 softdepend:
   - WorldGuard
@@ -11,7 +13,7 @@ softdepend:
   - MythicMobs
   - MythicLib
   - MMOItems
-authors: [ erik_sz ]
+
 website: https://auroramc.gg
 
 permissions:

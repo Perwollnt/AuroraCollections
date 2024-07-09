@@ -4,8 +4,10 @@ import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.aurora.api.levels.MatcherManager;
+import gg.auroramc.aurora.api.message.Chat;
 import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.message.Text;
+import gg.auroramc.aurora.api.reward.RewardExecutor;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.api.data.CollectionData;
 import gg.auroramc.collections.api.event.CollectionLevelUpEvent;
@@ -41,7 +43,7 @@ public class Collection {
 
         Map<String, IntervalMatcherConfig> collectionMatchers = new LinkedHashMap<>();
 
-        if(config.getUseGlobalLevelMatchers()) {
+        if (config.getUseGlobalLevelMatchers()) {
             collectionMatchers.putAll(globalConfig.getGlobalLevelMatchers());
             collectionMatchers.putAll(config.getLevelMatchers());
         } else {
@@ -115,24 +117,17 @@ public class Collection {
             }
 
 
-            int finalI = i;
+            if (mainConfig.getLevelUpSound().getEnabled()) {
+                var sound = mainConfig.getLevelUpSound();
+                player.playSound(player.getLocation(), Sound.valueOf(sound.getSound().toUpperCase()), sound.getVolume(), sound.getPitch());
+            }
 
-            Bukkit.getGlobalRegionScheduler().run(plugin,
-                    (task) -> {
-                        if (mainConfig.getLevelUpSound().getEnabled()) {
-                            var sound = mainConfig.getLevelUpSound();
-                            player.playSound(player.getLocation(), Sound.valueOf(sound.getSound().toUpperCase()), sound.getVolume(), sound.getPitch());
-                        }
+            if (mainConfig.getLevelUpMessage().getEnabled()) {
+                Chat.sendMessage(player, text.build());
+            }
 
-                        if (mainConfig.getLevelUpMessage().getEnabled()) {
-                            player.sendMessage(text);
-                        }
-
-                        for (var reward : rewards) {
-                            reward.execute(player, newLevel, placeholders);
-                        }
-                        Bukkit.getPluginManager().callEvent(new CollectionLevelUpEvent(player, this, finalI));
-                    });
+            RewardExecutor.execute(rewards, player, newLevel, placeholders);
+            Bukkit.getPluginManager().callEvent(new CollectionLevelUpEvent(player, this, i));
         }
     }
 
