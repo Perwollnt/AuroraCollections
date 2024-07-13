@@ -19,9 +19,16 @@ public class Config extends AuroraConfig {
     private LevelUpMessage levelUpMessage;
     private Map<String, DisplayComponent> displayComponents;
     private Boolean preventCreativeMode = false;
+    private LeaderboardConfig leaderboard;
 
     public Config(AuroraCollections plugin) {
         super(getFile(plugin));
+    }
+
+    @Getter
+    public static final class LeaderboardConfig {
+        private Integer cacheSize = 10;
+        private Integer minItemsCollected = 10;
     }
 
     @Getter

@@ -27,8 +27,7 @@ public class CollectionMenuConfig extends AuroraConfig {
 
     @Getter
     public static final class ItemTemplate {
-        private String name;
-        private List<String> lore;
+        private ItemConfig item;
         private Boolean enabled = true;
     }
 

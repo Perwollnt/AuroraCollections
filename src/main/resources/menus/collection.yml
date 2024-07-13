@@ -27,15 +27,20 @@ display-components:
 collection-menu-template:
   enabled: true
   # {prev_level} is correct here since the placeholders will be replaced with the next level
-  name: "&e{collection_name} {prev_level}"
-  lore:
-    - "&7View all your {collection_name} Collection"
-    - "&7progress and rewards!"
-    - ""
-    - "&7Progress to {collection_name} {level}: &e{progress_percent}&6%"
-    - "&r{progressbar} &e{current_formatted}&6/&e{required_formatted}"
-    - ""
-    - "&7Total collected: &e{total_formatted}"
+  item:
+    name: "&e{collection_name} {prev_level}"
+    lore:
+      - "&7View all your {collection_name} Collection"
+      - "&7progress and rewards!"
+      - ""
+      - "&7Progress to {collection_name} {level}: &e{progress_percent}&6%"
+      - "&r{progressbar} &e{current_formatted}&6/&e{required_formatted}"
+      - ""
+      - "&7Total collected: &e{total_formatted}"
+      - ""
+      - "&8Global ranking: &8#&a{lb_position}"
+      - "&8You are in the top &a{lb_position_percent}%&8 of &7{lb_size}"
+      - "&8players!"
 
 items:
   filler:

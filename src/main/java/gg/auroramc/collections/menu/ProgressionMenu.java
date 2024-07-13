@@ -10,7 +10,6 @@ import gg.auroramc.collections.collection.Collection;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,20 +54,12 @@ public class ProgressionMenu {
             new CollectionsMenu(player, plugin, collection.getCategory()).open();
         });
 
-        var iconBuilder = ItemBuilder.of(collection.getConfig().getMenuItem())
+        var template = config.getCollectionMenuTemplate();
+        var iconConfig = template.getEnabled() ? template.getItem().merge(collection.getConfig().getMenuItem()) : collection.getConfig().getMenuItem();
+
+        var iconBuilder = ItemBuilder.of(iconConfig)
                 .placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1))
                 .defaultSlot(4);
-
-        var template = config.getCollectionMenuTemplate();
-
-        if (template.getEnabled()) {
-            if (template.getName() != null) {
-                iconBuilder.setName(template.getName());
-            }
-            if (template.getLore() != null) {
-                iconBuilder.setLore(template.getLore());
-            }
-        }
 
         menu.addItem(iconBuilder.build(player));
 

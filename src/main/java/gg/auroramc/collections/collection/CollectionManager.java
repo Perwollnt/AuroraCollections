@@ -23,7 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -63,7 +63,15 @@ public class CollectionManager implements Listener {
     }
 
     public Collection getCollection(String category, String name) {
-        return categories.get(category).get(name);
+        var collectionMap = categories.get(category);
+        if(collectionMap != null) {
+            return collectionMap.get(name);
+        }
+        return null;
+    }
+
+    public boolean hasCategory(String category) {
+        return categories.containsKey(category);
     }
 
     public void progressCollections(Player player, TypeId type, int amount, String... triggers) {
@@ -77,12 +85,21 @@ public class CollectionManager implements Listener {
         }
 
         CompletableFuture.runAsync(() -> {
+            var toUpdate = new HashSet<String>();
+
             for (var category : categories.values()) {
                 for (var collection : category.values()) {
                     if (Arrays.stream(triggers).anyMatch(trigger -> collection.getConfig().getParsedTriggers().contains(trigger))) {
                         collection.progress(player, type, amount);
+                        toUpdate.add(collection.getCategory() + "_" + collection.getId());
                     }
                 }
+            }
+
+            if (!toUpdate.isEmpty()) {
+                var user = AuroraAPI.getUserManager().getUser(player);
+                if (!user.isLoaded()) return;
+                AuroraAPI.getLeaderboards().updateUser(user, toUpdate.toArray(new String[0]));
             }
         });
     }

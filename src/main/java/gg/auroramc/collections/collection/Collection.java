@@ -1,5 +1,6 @@
 package gg.auroramc.collections.collection;
 
+import com.google.common.collect.Lists;
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.aurora.api.item.TypeId;
@@ -135,7 +136,8 @@ public class Collection {
         var requirement = getRequiredAmount(newLevel);
 
         var pConfig = plugin.getConfigManager().getCollectionMenuConfig();
-        var data = AuroraAPI.getUser(player.getUniqueId()).getData(CollectionData.class);
+        var user = AuroraAPI.getUser(player.getUniqueId());
+        var data = user.getData(CollectionData.class);
         var currentProgress = data.getCollectionCount(category, id);
         var bar = pConfig.getProgressBar();
         var pcs = bar.getLength();
@@ -149,7 +151,7 @@ public class Collection {
         var oldLevel2 = roman ? RomanNumber.toRoman(oldLevel) : String.valueOf(oldLevel);
         var newLevel2 = roman ? RomanNumber.toRoman(newLevel) : String.valueOf(newLevel);
 
-        return List.of(
+        List<Placeholder<?>> placeholders = Lists.newArrayList(
                 Placeholder.of("{player}", player.getName()),
                 Placeholder.of("{prev_level}", oldLevel2),
                 Placeholder.of("{prev_level_raw}", oldLevel),
@@ -172,6 +174,29 @@ public class Collection {
                 Placeholder.of("{total}", data.getCollectionCount(category, id)),
                 Placeholder.of("{total_formatted}", AuroraAPI.formatNumber(data.getCollectionCount(category, id)))
         );
+
+        var boardName = category + "_" + id;
+        var lb = user.getLeaderboardEntries().get(boardName);
+        var lbm = AuroraAPI.getLeaderboards();
+
+        AuroraAPI.formatNumber(Math.max(AuroraAPI.getLeaderboards().getBoardSize("levels"), lb == null ? Bukkit.getOnlinePlayers().size() : lb.getPosition()));
+
+        if (lb != null) {
+            placeholders.add(Placeholder.of("{lb_position}", AuroraAPI.formatNumber(lb.getPosition())));
+            placeholders.add(Placeholder.of("{lb_position_percent}", AuroraAPI.formatNumber(
+                    Math.min(((double) lb.getPosition() / Math.max(1, AuroraAPI.getLeaderboards().getBoardSize(boardName))) * 100, 100)
+            )));
+            placeholders.add(Placeholder.of("{lb_size}",
+                    AuroraAPI.formatNumber(
+                            Math.max(Math.max(lb.getPosition(), Bukkit.getOnlinePlayers().size()), AuroraAPI.getLeaderboards().getBoardSize(boardName)))));
+        } else {
+            placeholders.add(Placeholder.of("{lb_position}", lbm.getEmptyPlaceholder()));
+            placeholders.add(Placeholder.of("{lb_position_percent}", lbm.getEmptyPlaceholder()));
+            placeholders.add(Placeholder.of("{lb_size}",
+                    AuroraAPI.formatNumber(Math.max(Bukkit.getOnlinePlayers().size(), AuroraAPI.getLeaderboards().getBoardSize(boardName)))));
+        }
+
+        return placeholders;
     }
 
     public List<Placeholder<?>> getPlaceholders(Player player, long level) {

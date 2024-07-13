@@ -33,13 +33,25 @@ public final class AuroraCollections extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        l = AuroraAPI.createLogger("AuroraCollections", () -> configManager != null && configManager.getConfig().getDebug());
+        configManager = new ConfigManager(this);
+        l = AuroraAPI.createLogger("AuroraCollections", () -> configManager.getConfig().getDebug());
         HookManager.loadHooks(this);
+
+        for (var entry : configManager.getCollections().entrySet()) {
+            for (var id : entry.getValue().keySet()) {
+                AuroraAPI.getLeaderboards().registerBoard(
+                        entry.getKey() + "_" + id,
+                        (user) -> Double.valueOf(user.getData(CollectionData.class).getCollectionCount(entry.getKey(), id)),
+                        (lb) -> AuroraAPI.formatNumber(((Double) lb.getValue()).longValue()),
+                        configManager.getConfig().getLeaderboard().getCacheSize(),
+                        configManager.getConfig().getLeaderboard().getMinItemsCollected().doubleValue()
+                );
+            }
+        }
     }
 
     @Override
     public void onEnable() {
-        configManager = new ConfigManager(this);
         itemManager = AuroraAPI.getItemManager();
 
         AuroraAPI.getUserManager().registerUserDataHolder(CollectionData.class);

@@ -1,12 +1,10 @@
 package gg.auroramc.collections.menu;
 
-import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.aurora.api.menu.ItemBuilder;
 import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.api.data.CollectionData;
 import gg.auroramc.collections.collection.Collection;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -74,17 +72,10 @@ public class CollectionsMenu {
             var collection = collections.get(i);
             var template = cConfig.getCollectionMenuTemplate();
 
-            var builder = ItemBuilder.of(collection.getConfig().getMenuItem())
-                    .slot(slot).placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1));
+            var itemConfig = template.getEnabled() ? template.getItem().merge(collection.getConfig().getMenuItem()) : collection.getConfig().getMenuItem();
 
-            if (template.getEnabled()) {
-                if (template.getName() != null) {
-                    builder.setName(template.getName());
-                }
-                if (template.getLore() != null) {
-                    builder.setLore(template.getLore());
-                }
-            }
+            var builder = ItemBuilder.of(itemConfig).slot(slot)
+                    .placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1));
 
             menu.addItem(builder.build(player), (e) -> {
                 new ProgressionMenu(player, plugin, collection).open();
