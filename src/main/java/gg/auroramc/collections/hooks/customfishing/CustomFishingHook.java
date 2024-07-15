@@ -4,7 +4,7 @@ import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.config.CollectionConfig;
 import gg.auroramc.collections.hooks.Hook;
 import gg.auroramc.collections.hooks.customfishing.listener.CustomFishingListener;
-import net.momirealms.customfishing.api.CustomFishingPlugin;
+import net.momirealms.customfishing.api.BukkitCustomFishingPlugin;
 import net.momirealms.customfishing.api.mechanic.loot.LootType;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -29,22 +29,19 @@ public class CustomFishingHook implements Hook {
     }
 
     private void generateDefaultCollections(AuroraCollections plugin) {
-        for (var loot : CustomFishingPlugin.get().getLootManager().getAllLoots()) {
-            if (loot.getType() != LootType.ITEM) continue;
-            if (Arrays.stream(loot.getLootGroup()).noneMatch(s -> s.contains("river") || s.contains("ocean"))) continue;
+        for (var loot : BukkitCustomFishingPlugin.getInstance().getLootManager().getRegisteredLoots()) {
+            if (loot.type() != LootType.ITEM) continue;
+            if (Arrays.stream(loot.lootGroup()).noneMatch(s -> s.contains("river") || s.contains("ocean"))) continue;
 
-            var item = CustomFishingPlugin.get().getItemManager().getBuildableItem("item", loot.getID());
-            if (item == null) continue;
-
-            var file = new File(plugin.getDataFolder(), "collections/fishing/0005_cf_" + loot.getID() + ".yml");
+            var file = new File(plugin.getDataFolder(), "collections/fishing/0005_cf_" + loot.id() + ".yml");
             if (file.exists()) continue;
 
             var yaml = new YamlConfiguration();
             yaml.set("triggers", List.of("fish"));
-            yaml.set("types", List.of("customfishing:" + loot.getID()));
-            yaml.set("name", loot.getNick());
+            yaml.set("types", List.of("customfishing:" + loot.id()));
+            yaml.set("name", loot.nick());
 
-            yaml.set("menu-item.material", "customfishing:" + loot.getID());
+            yaml.set("menu-item.material", "customfishing:" + loot.id());
 
             yaml.set("requirements", List.of(50, 100, 250, 1000, 2500, 5000, 10000));
             yaml.set("use-global-level-matchers", true);
@@ -54,7 +51,7 @@ public class CustomFishingHook implements Hook {
                 yaml.save(file);
                 var config = new CollectionConfig(file);
                 config.load();
-                plugin.getConfigManager().getCollections().get("fishing").put("0005_cf_" + loot.getID(), config);
+                plugin.getConfigManager().getCollections().get("fishing").put("0005_cf_" + loot.id(), config);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
