@@ -60,7 +60,7 @@ public class Collection {
         var requirements = config.getRequirements();
 
         for (int i = requirements.size() - 1; i >= 0; i--) {
-            if (progress > requirements.get(i)) {
+            if (progress >= requirements.get(i)) {
                 return i + 1;
             }
         }
