@@ -138,7 +138,7 @@ public class Collection {
         var pConfig = plugin.getConfigManager().getCollectionMenuConfig();
         var user = AuroraAPI.getUser(player.getUniqueId());
         var data = user.getData(CollectionData.class);
-        var currentProgress = data.getCollectionCount(category, id);
+        var currentProgress = Math.min(data.getCollectionCount(category, id), requirement);
         var bar = pConfig.getProgressBar();
         var pcs = bar.getLength();
         var completedPercent = Math.min((double) currentProgress / requirement, 1);
