@@ -20,6 +20,7 @@ public class CollectionConfig extends AuroraConfig {
     private Set<String> triggers;
     private Set<String> types;
     private String name;
+    private String menuTitle;
     private List<Integer> requirements;
     private Boolean useGlobalLevelMatchers;
     private Map<String, IntervalMatcherConfig> levelMatchers;

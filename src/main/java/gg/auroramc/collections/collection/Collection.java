@@ -150,6 +150,7 @@ public class Collection {
 
         var oldLevel2 = roman ? RomanNumber.toRoman(oldLevel) : String.valueOf(oldLevel);
         var newLevel2 = roman ? RomanNumber.toRoman(newLevel) : String.valueOf(newLevel);
+        var menuTitle = this.config.getMenuTitle() == null ? this.config.getName() : this.config.getMenuTitle();
 
         List<Placeholder<?>> placeholders = Lists.newArrayList(
                 Placeholder.of("{player}", player.getName()),
@@ -163,6 +164,7 @@ public class Collection {
                 Placeholder.of("{level_formatted}", roman ? newLevel2 : AuroraAPI.formatNumber(newLevel)),
                 Placeholder.of("{collection}", id),
                 Placeholder.of("{collection_name}", this.config.getName()),
+                Placeholder.of("{collection_title}", menuTitle),
                 Placeholder.of("{category}", category),
                 Placeholder.of("{category_name}", plugin.getConfigManager().getCategoriesConfig().getCategories().get(category)),
                 Placeholder.of("{progressbar}", bar.getFilledCharacter().repeat(completedPcs) + bar.getUnfilledCharacter().repeat(remainingPcs) + "&r"),
@@ -202,6 +204,10 @@ public class Collection {
     public List<Placeholder<?>> getPlaceholders(Player player, long level) {
         level = Math.max(1, level);
         return getPlaceholders(player, level - 1, level);
+    }
+
+    public String getMenuTitle() {
+        return config.getMenuTitle() == null ? config.getName() : config.getMenuTitle();
     }
 
     public void progress(Player player, TypeId type) {

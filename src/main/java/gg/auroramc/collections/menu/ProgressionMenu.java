@@ -36,7 +36,10 @@ public class ProgressionMenu {
     private AuroraMenu createMenu() {
         var config = plugin.getConfigManager().getCollectionMenuConfig();
 
-        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId, Placeholder.of("{collection_name}", collection.getConfig().getName()));
+        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId,
+                Placeholder.of("{collection_name}", collection.getConfig().getName()),
+                Placeholder.of("{collection_title}", collection.getMenuTitle())
+        );
 
         if (config.getItems().getFiller().getEnabled()) {
             menu.addFiller(ItemBuilder.of(config.getItems().getFiller().getItem()).toItemStack(player));
