@@ -183,7 +183,7 @@ public class Collection {
 
         AuroraAPI.formatNumber(Math.max(AuroraAPI.getLeaderboards().getBoardSize("levels"), lb == null ? Bukkit.getOnlinePlayers().size() : lb.getPosition()));
 
-        if (lb != null) {
+        if (lb != null && lb.getPosition() != 0) {
             placeholders.add(Placeholder.of("{lb_position}", AuroraAPI.formatNumber(lb.getPosition())));
             placeholders.add(Placeholder.of("{lb_position_percent}", AuroraAPI.formatNumber(
                     Math.min(((double) lb.getPosition() / Math.max(1, AuroraAPI.getLeaderboards().getBoardSize(boardName))) * 100, 100)
