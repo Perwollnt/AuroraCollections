@@ -12,7 +12,8 @@ items:
     lore:
       - "&7View your {name} collections!"
       - ""
-      - "&eClick to view!"
+      - "&eLeft click to view!"
+      - "&eRight click to view rewards!"
     material: WHEAT
     slot: 20
   mining:
@@ -20,7 +21,8 @@ items:
     lore:
       - "&7View your {name} collections!"
       - ""
-      - "&eClick to view!"
+      - "&eLeft click to view!"
+      - "&eRight click to view rewards!"
     material: IRON_PICKAXE
     slot: 21
     flags:
@@ -30,7 +32,8 @@ items:
     lore:
       - "&7View your {name} collections!"
       - ""
-      - "&eClick to view!"
+      - "&eLeft click to view!"
+      - "&eRight click to view rewards!"
     material: DIAMOND_SWORD
     slot: 22
     flags:
@@ -40,7 +43,8 @@ items:
     lore:
       - "&7View your {name} collections!"
       - ""
-      - "&eClick to view!"
+      - "&eLeft click to view!"
+      - "&eRight click to view rewards!"
     material: OAK_LEAVES
     slot: 23
   fishing:
@@ -48,7 +52,8 @@ items:
     lore:
       - "&7View your {name} collections!"
       - ""
-      - "&eClick to view!"
+      - "&eLeft click to view!"
+      - "&eRight click to view rewards!"
     material: FISHING_ROD
     slot: 24
 

@@ -4,18 +4,19 @@ import com.google.common.collect.Maps;
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
 import gg.auroramc.aurora.api.item.TypeId;
-import gg.auroramc.aurora.api.reward.CommandReward;
-import gg.auroramc.aurora.api.reward.MoneyReward;
-import gg.auroramc.aurora.api.reward.ItemReward;
-import gg.auroramc.aurora.api.reward.RewardAutoCorrector;
-import gg.auroramc.aurora.api.reward.RewardFactory;
+import gg.auroramc.aurora.api.message.Chat;
+import gg.auroramc.aurora.api.message.Placeholder;
+import gg.auroramc.aurora.api.message.Text;
+import gg.auroramc.aurora.api.reward.*;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
+import gg.auroramc.collections.api.event.CollectionLevelUpEvent;
 import gg.auroramc.collections.hooks.HookManager;
 import gg.auroramc.collections.hooks.worldguard.WorldGuardHook;
 import gg.auroramc.collections.listener.*;
 import gg.auroramc.collections.reward.corrector.CommandCorrector;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -35,6 +36,7 @@ public class CollectionManager implements Listener {
     private final RewardFactory rewardFactory = new RewardFactory();
     @Getter
     private final RewardAutoCorrector rewardAutoCorrector = new RewardAutoCorrector();
+    private final Map<String, Category> categoryMap = Maps.newConcurrentMap();
 
     public CollectionManager(AuroraCollections plugin) {
         this.plugin = plugin;
@@ -58,13 +60,35 @@ public class CollectionManager implements Listener {
         return categories.values().stream().flatMap(map -> map.values().stream()).toList();
     }
 
+    public Category getCategory(String category) {
+        return categoryMap.get(category);
+    }
+
+    public java.util.Collection<Collection> getCollectionsForCategory(String category) {
+        return categories.get(category).values();
+    }
+
+    public int getMaxCategoryLevel(String category) {
+        if (!categories.containsKey(category)) return 0;
+        return categories.get(category).values().stream().mapToInt(Collection::getMaxLevel).sum();
+    }
+
+    public int getCategoryLevel(String category, Player player) {
+        if (!categories.containsKey(category)) return 0;
+        return categories.get(category).values().stream().mapToInt(c -> c.getPlayerLevel(player)).sum();
+    }
+
+    public double getCategoryCompletionPercent(String category, Player player) {
+        return getCategoryLevel(category, player) / Math.max(getMaxCategoryLevel(category), 1D);
+    }
+
     public List<Collection> getCollectionsByCategory(String category) {
         return List.copyOf(categories.get(category).values());
     }
 
     public Collection getCollection(String category, String name) {
         var collectionMap = categories.get(category);
-        if(collectionMap != null) {
+        if (collectionMap != null) {
             return collectionMap.get(name);
         }
         return null;
@@ -105,6 +129,7 @@ public class CollectionManager implements Listener {
     }
 
     public void reloadCollections() {
+        categoryMap.clear();
         categories.clear();
         var config = plugin.getConfigManager().getCollections();
         for (var category : config.entrySet()) {
@@ -114,10 +139,74 @@ public class CollectionManager implements Listener {
             }
             categories.put(category.getKey(), categoryMap);
         }
+
+        for (var entry : plugin.getConfigManager().getCategoriesConfig().getCategories().entrySet()) {
+            categoryMap.put(entry.getKey(), new Category(rewardFactory, entry.getValue()));
+        }
     }
 
     @EventHandler
     public void onUserLoaded(AuroraUserLoadedEvent e) {
         rewardAutoCorrector.correctRewards(e.getUser().getPlayer());
+    }
+
+    @EventHandler
+    public void onCollectionLevelUp(CollectionLevelUpEvent e) {
+        var categoryId = e.getCollection().getCategory();
+        var category = categoryMap.get(categoryId);
+
+        if (!category.isLevelingEnabled()) return;
+
+        var player = e.getPlayer();
+
+        int level = getCategoryLevel(categoryId, player);
+        var rewards = category.getRewards(level - 1, level, getMaxCategoryLevel(categoryId));
+
+        if (rewards.isEmpty()) return;
+
+        double highestPercent = 0;
+
+        var currentPercent = getCategoryCompletionPercent(categoryId, player) * 100;
+        for(var r : category.getRewards()) {
+            if(r.percentage() > highestPercent && currentPercent >= r.percentage()) {
+                highestPercent = r.percentage();
+            }
+        }
+
+        List<Placeholder<?>> placeholders = List.of(
+                Placeholder.of("{category_name}", categoryMap.get(categoryId).getConfig().getName()),
+                Placeholder.of("{category_id}", categoryId),
+                Placeholder.of("{percent}", AuroraAPI.formatNumber(highestPercent))
+        );
+
+        var lvlUpMsg = plugin.getConfigManager().getConfig().getCategoryLevelUpMessage();
+
+        if (lvlUpMsg.getEnabled()) {
+            var text = Component.text();
+            var messageLines = lvlUpMsg.getMessage();
+            var mainConfig = plugin.getConfigManager().getConfig();
+
+            for (var line : messageLines) {
+                if (line.equals("component:rewards")) {
+
+                    if (!rewards.isEmpty()) {
+                        text.append(Text.component(e.getPlayer(), mainConfig.getDisplayComponents().get("rewards").getTitle(), placeholders));
+                    }
+                    for (var reward : rewards) {
+                        text.append(Component.newline());
+                        var display = mainConfig.getDisplayComponents().get("rewards").getLine().replace("{reward}", reward.getDisplay(player, placeholders));
+                        text.append(Text.component(player, display, placeholders));
+                    }
+                } else {
+                    text.append(Text.component(player, line, placeholders));
+                }
+
+                if (!line.equals(messageLines.getLast())) text.append(Component.newline());
+            }
+
+            Chat.sendMessage(player, text.build());
+        }
+
+        RewardExecutor.execute(rewards, player, level, placeholders);
     }
 }

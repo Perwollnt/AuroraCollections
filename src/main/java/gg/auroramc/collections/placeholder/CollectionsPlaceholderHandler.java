@@ -34,7 +34,26 @@ public class CollectionsPlaceholderHandler implements PlaceholderHandler {
         var romanNumeral = plugin.getConfigManager().getCollectionMenuConfig().getForceRomanNumerals();
         var full = String.join("_", args);
 
-        if (full.endsWith("next_count_raw")) {
+        if (args[0].equals("category")) {
+            if (full.endsWith("completed_percent_raw")) {
+                var category = String.join("_", Arrays.copyOfRange(args, 1, args.length - 3));
+                return String.valueOf(manager.getCategoryCompletionPercent(category, player));
+            } else if (full.endsWith("completed_percent")) {
+                var category = String.join("_", Arrays.copyOfRange(args, 1, args.length - 2));
+                return AuroraAPI.formatNumber(manager.getCategoryCompletionPercent(category, player) * 100);
+            } else if (full.endsWith("level_raw")) {
+                var category = String.join("_", Arrays.copyOfRange(args, 1, args.length - 2));
+                return String.valueOf(manager.getCategoryLevel(category, player));
+            } else if (full.endsWith("max_level")) {
+                var category = String.join("_", Arrays.copyOfRange(args, 1, args.length - 2));
+                var maxLevel = manager.getMaxCategoryLevel(category);
+                return romanNumeral ? RomanNumber.toRoman((long) maxLevel) : AuroraAPI.formatNumber(maxLevel);
+            } else if (full.endsWith("level")) {
+                var category = String.join("_", Arrays.copyOfRange(args, 1, args.length - 1));
+                var level = manager.getCategoryLevel(category, player);
+                return romanNumeral ? RomanNumber.toRoman((long) level) : AuroraAPI.formatNumber(level);
+            }
+        } else if (full.endsWith("next_count_raw")) {
             var collection = getCollection(Arrays.copyOf(args, args.length - 3));
             if (collection == null) return null;
             var nextCount = collection.getRequiredAmount(collection.getPlayerLevel(player) + 1);
@@ -90,6 +109,11 @@ public class CollectionsPlaceholderHandler implements PlaceholderHandler {
         var manager = plugin.getCollectionManager();
 
         return manager.getAllCollections().stream().flatMap(c -> Stream.of(
+                        "category_" + c.getCategory() + "_level",
+                        "category_" + c.getCategory() + "_level_raw",
+                        "category_" + c.getCategory() + "_max_level",
+                        "category_" + c.getCategory() + "_completed_percent",
+                        "category_" + c.getCategory() + "_completed_percent_raw",
                         c.getCategory() + "_" + c.getId() + "_name",
                         c.getCategory() + "_" + c.getId() + "_level",
                         c.getCategory() + "_" + c.getId() + "_level_raw",

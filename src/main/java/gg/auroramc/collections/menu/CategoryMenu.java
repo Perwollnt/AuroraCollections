@@ -42,10 +42,14 @@ public class CategoryMenu {
 
         for (var item : config.getItems().entrySet()) {
             var category = item.getKey();
-            var categoryName = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category);
+            var categoryName = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category).getName();
 
             menu.addItem(ItemBuilder.of(item.getValue()).placeholder(Placeholder.of("{name}", categoryName)).build(player), (e) -> {
-                new CollectionsMenu(player, plugin, category).open();
+                if (e.isRightClick() && plugin.getCollectionManager().getCategory(category).isLevelingEnabled()) {
+                    new CategoryRewardsMenu(player, plugin, category).open();
+                } else {
+                    new CollectionsMenu(player, plugin, category).open();
+                }
             });
         }
 

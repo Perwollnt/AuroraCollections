@@ -1,9 +1,9 @@
 package gg.auroramc.collections.config;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.config.menu.CategoriesMenuConfig;
+import gg.auroramc.collections.config.menu.CategoryRewardsMenuConfig;
 import gg.auroramc.collections.config.menu.CollectionListMenuConfig;
 import gg.auroramc.collections.config.menu.CollectionMenuConfig;
 import lombok.Getter;
@@ -29,6 +29,7 @@ public class ConfigManager {
     private CategoriesMenuConfig categoriesMenuConfig;
     private CollectionListMenuConfig collectionListMenuConfig;
     private CollectionMenuConfig collectionMenuConfig;
+    private CategoryRewardsMenuConfig categoryRewardsMenuConfig;
     private final Map<String, Map<String, CollectionConfig>> collections = Maps.newConcurrentMap();
 
     public ConfigManager(AuroraCollections plugin) {
@@ -67,6 +68,10 @@ public class ConfigManager {
         CollectionMenuConfig.saveDefault(plugin);
         collectionMenuConfig = new CollectionMenuConfig(plugin);
         collectionMenuConfig.load();
+
+        CategoryRewardsMenuConfig.saveDefault(plugin);
+        categoryRewardsMenuConfig = new CategoryRewardsMenuConfig(plugin);
+        categoryRewardsMenuConfig.load();
 
         if (saveDefaultCollections) {
             this.saveDefaultCollections();

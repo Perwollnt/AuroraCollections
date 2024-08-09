@@ -54,6 +54,10 @@ public class Collection {
         levelMatcher.reload(collectionMatchers, config.getCustomLevels());
     }
 
+    public int getMaxLevel() {
+        return config.getRequirements().size();
+    }
+
     public int getPlayerLevel(Player player) {
         var data = AuroraAPI.getUserManager().getUser(player).getData(CollectionData.class);
         var progress = data.getCollectionCount(category, id);
@@ -166,7 +170,7 @@ public class Collection {
                 Placeholder.of("{collection_name}", this.config.getName()),
                 Placeholder.of("{collection_title}", menuTitle),
                 Placeholder.of("{category}", category),
-                Placeholder.of("{category_name}", plugin.getConfigManager().getCategoriesConfig().getCategories().get(category)),
+                Placeholder.of("{category_name}", plugin.getConfigManager().getCategoriesConfig().getCategories().get(category).getName()),
                 Placeholder.of("{progressbar}", bar.getFilledCharacter().repeat(completedPcs) + bar.getUnfilledCharacter().repeat(remainingPcs) + "&r"),
                 Placeholder.of("{progress_percent}", Math.round(completedPercent * 100)),
                 Placeholder.of("{current}", currentProgress),

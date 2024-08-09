@@ -37,7 +37,7 @@ public class CollectionsMenu {
         var cConfig = plugin.getConfigManager().getCollectionMenuConfig();
         var categories = plugin.getConfigManager().getCategoriesConfig().getCategories();
 
-        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId, Placeholder.of("{category}", categories.get(category)));
+        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId, Placeholder.of("{category}", categories.get(category).getName()));
 
         if (config.getItems().getFiller().getEnabled()) {
             menu.addFiller(ItemBuilder.of(config.getItems().getFiller().getItem()).toItemStack(player));
@@ -57,7 +57,7 @@ public class CollectionsMenu {
 
         menu.addItem(ItemBuilder.of(plugin.getConfigManager().getCategoriesMenuConfig().getItems().get(category))
                 .slot(4)
-                .placeholder(Placeholder.of("{name}", categories.get(category)))
+                .placeholder(Placeholder.of("{name}", categories.get(category).getName()))
                 .build(player));
 
         var collections = getPage(page, config.getDisplayArea().size());
