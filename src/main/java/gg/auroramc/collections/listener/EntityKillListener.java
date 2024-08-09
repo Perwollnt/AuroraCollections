@@ -1,5 +1,6 @@
 package gg.auroramc.collections.listener;
 
+import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
@@ -25,7 +26,11 @@ public class EntityKillListener implements Listener {
         var drops = e.getDrops();
 
         var manager = plugin.getCollectionManager();
-        manager.progressCollections(killer, TypeId.from(e.getEntity().getType()), 1, Trigger.ENTITY_KILL);
+
+        var mobId = AuroraAPI.getEntityManager().resolveId(e.getEntity());
+        if (mobId.namespace().equals("mythicmobs")) return;
+
+        manager.progressCollections(killer, mobId, 1, Trigger.ENTITY_KILL);
 
         for (var drop : drops) {
             manager.progressCollections(killer, TypeId.from(drop.getType()), drop.getAmount(), Trigger.ENTITY_LOOT);
