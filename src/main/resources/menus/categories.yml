@@ -11,6 +11,7 @@ items:
     name: "&a{name} Collections"
     lore:
       - "&7View your {name} collections!"
+      - "&7Completion: &e{progress_percent}%"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
@@ -20,6 +21,7 @@ items:
     name: "&a{name} Collections"
     lore:
       - "&7View your {name} collections!"
+      - "&7Completion: &e{progress_percent}%"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
@@ -31,6 +33,7 @@ items:
     name: "&a{name} Collections"
     lore:
       - "&7View your {name} collections!"
+      - "&7Completion: &e{progress_percent}%"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
@@ -42,6 +45,7 @@ items:
     name: "&a{name} Collections"
     lore:
       - "&7View your {name} collections!"
+      - "&7Completion: &e{progress_percent}%"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
@@ -51,6 +55,7 @@ items:
     name: "&a{name} Collections"
     lore:
       - "&7View your {name} collections!"
+      - "&7Completion: &e{progress_percent}%"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
