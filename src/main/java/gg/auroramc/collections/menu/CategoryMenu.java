@@ -1,5 +1,6 @@
 package gg.auroramc.collections.menu;
 
+import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.aurora.api.menu.ItemBuilder;
 import gg.auroramc.aurora.api.message.Placeholder;
@@ -43,14 +44,19 @@ public class CategoryMenu {
         for (var item : config.getItems().entrySet()) {
             var category = item.getKey();
             var categoryName = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category).getName();
+            var currentPercentage = AuroraAPI.formatNumber(plugin.getCollectionManager().getCategoryCompletionPercent(category, player) * 100);
 
-            menu.addItem(ItemBuilder.of(item.getValue()).placeholder(Placeholder.of("{name}", categoryName)).build(player), (e) -> {
-                if (e.isRightClick() && plugin.getCollectionManager().getCategory(category).isLevelingEnabled()) {
-                    new CategoryRewardsMenu(player, plugin, category).open();
-                } else {
-                    new CollectionsMenu(player, plugin, category).open();
-                }
-            });
+            menu.addItem(ItemBuilder.of(item.getValue())
+                            .placeholder(Placeholder.of("{name}", categoryName))
+                            .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
+                            .build(player),
+                    (e) -> {
+                        if (e.isRightClick() && plugin.getCollectionManager().getCategory(category).isLevelingEnabled()) {
+                            new CategoryRewardsMenu(player, plugin, category).open();
+                        } else {
+                            new CollectionsMenu(player, plugin, category).open();
+                        }
+                    });
         }
 
         return menu;
