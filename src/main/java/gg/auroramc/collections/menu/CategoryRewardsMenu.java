@@ -36,7 +36,7 @@ public class CategoryRewardsMenu {
         var config = plugin.getConfigManager().getCategoryRewardsMenuConfig();
         var cf = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category);
 
-        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId,
+        var menu = new AuroraMenu(player, config.getTitle(), config.getRows() * 9, false, menuId,
                 Placeholder.of("{category_name}", cf.getName())
         );
 

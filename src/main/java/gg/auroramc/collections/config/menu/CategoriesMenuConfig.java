@@ -14,6 +14,7 @@ public class CategoriesMenuConfig extends AuroraConfig {
     private FillerItem filler;
     private Map<String, ItemConfig> items;
     private Map<String, ItemConfig> customItems;
+    private Integer rows = 6;
 
     @Getter
     public static final class FillerItem {

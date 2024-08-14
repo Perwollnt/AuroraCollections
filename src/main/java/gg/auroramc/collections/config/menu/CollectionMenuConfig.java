@@ -20,6 +20,7 @@ public class CollectionMenuConfig extends AuroraConfig {
     private Boolean allowItemAmounts = false;
     private Boolean forceRomanNumerals = false;
     private ItemTemplate collectionMenuTemplate;
+    private Integer rows = 6;
 
     public CollectionMenuConfig(AuroraCollections plugin) {
         super(getFile(plugin));

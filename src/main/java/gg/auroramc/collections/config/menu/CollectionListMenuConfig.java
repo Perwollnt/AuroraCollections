@@ -15,6 +15,7 @@ public class CollectionListMenuConfig extends AuroraConfig {
     private Map<String, ItemConfig> customItems;
     private List<Integer> displayArea;
     private Items items;
+    private Integer rows = 6;
 
     @Getter
     public static final class Items {

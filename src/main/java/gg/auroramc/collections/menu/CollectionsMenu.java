@@ -37,7 +37,7 @@ public class CollectionsMenu {
         var cConfig = plugin.getConfigManager().getCollectionMenuConfig();
         var categories = plugin.getConfigManager().getCategoriesConfig().getCategories();
 
-        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId, Placeholder.of("{category}", categories.get(category).getName()));
+        var menu = new AuroraMenu(player, config.getTitle(), config.getRows() * 9, false, menuId, Placeholder.of("{category}", categories.get(category).getName()));
 
         if (config.getItems().getFiller().getEnabled()) {
             menu.addFiller(ItemBuilder.of(config.getItems().getFiller().getItem()).toItemStack(player));

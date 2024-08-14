@@ -17,6 +17,7 @@ public class CategoryRewardsMenuConfig extends AuroraConfig {
     private Map<String, DisplayComponent> displayComponents;
     private List<Integer> displayArea;
     private Items items;
+    private Integer rows = 6;
 
     public CategoryRewardsMenuConfig(AuroraCollections plugin) {
         super(getFile(plugin));

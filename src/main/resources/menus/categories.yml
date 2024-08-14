@@ -1,5 +1,7 @@
 title: "Collections"
 
+rows: 6
+
 filler:
   enabled: true
   item:

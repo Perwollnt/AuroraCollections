@@ -1,5 +1,7 @@
 title: "{collection_name} collection"
 
+rows: 6
+
 # If every one of your collection have less than 64 levels, then you can set this to true
 # This will set item amounts to the level in the menu
 allow-item-amounts: true

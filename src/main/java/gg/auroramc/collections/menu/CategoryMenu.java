@@ -29,7 +29,7 @@ public class CategoryMenu {
     private AuroraMenu createMenu() {
         var config = plugin.getConfigManager().getCategoriesMenuConfig();
 
-        var menu = new AuroraMenu(player, config.getTitle(), 54, false, menuId);
+        var menu = new AuroraMenu(player, config.getTitle(), config.getRows() * 9, false, menuId);
 
         if (config.getFiller().getEnabled()) {
             menu.addFiller(ItemBuilder.of(config.getFiller().getItem()).toItemStack(player));
