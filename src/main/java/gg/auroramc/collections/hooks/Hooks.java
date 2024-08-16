@@ -8,6 +8,7 @@ import gg.auroramc.collections.hooks.mmoitems.MMOItemsHook;
 import gg.auroramc.collections.hooks.mmolib.MMOLibHook;
 import gg.auroramc.collections.hooks.mythic.MythicHook;
 import gg.auroramc.collections.hooks.oraxen.OraxenHook;
+import gg.auroramc.collections.hooks.topminions.TopMinionsHook;
 import gg.auroramc.collections.hooks.worldguard.WorldGuardHook;
 import lombok.Getter;
 
@@ -21,7 +22,8 @@ public enum Hooks {
     MYTHIC_MOBS(MythicHook.class, "MythicMobs"),
     ORAXEN(OraxenHook.class, "Oraxen"),
     WORLD_GUARD(WorldGuardHook.class, "WorldGuard"),
-    MMOLIB(MMOLibHook.class, "MythicLib");
+    MMOLIB(MMOLibHook.class, "MythicLib"),
+    TOP_MINIONS(TopMinionsHook.class, "TopMinion");
 
     private final Class<? extends Hook> clazz;
     private final String plugin;

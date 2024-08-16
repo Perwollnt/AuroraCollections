@@ -14,6 +14,7 @@ softdepend:
   - MythicLib
   - MMOItems
   - LuckPerms
+  - TopMinion
 
 website: https://auroramc.gg
 

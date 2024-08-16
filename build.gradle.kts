@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("gg.auroramc:Aurora:1.5.9")
+    compileOnly("gg.auroramc:Aurora:1.5.10")
     compileOnly("gg.auroramc:AuroraLevels:1.5.1")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("dev.aurelium:auraskills-api-bukkit:2.0.7")
@@ -49,6 +49,7 @@ dependencies {
     compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
     compileOnly("net.Indyuce:MMOItems-API:6.10-SNAPSHOT")
     compileOnly("io.th0rgal:oraxen:2.0-SNAPSHOT")
+    compileOnly("com.sarry20:TopMinion:2.3.2")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
