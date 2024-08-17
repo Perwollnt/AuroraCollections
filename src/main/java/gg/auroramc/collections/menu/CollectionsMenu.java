@@ -1,5 +1,6 @@
 package gg.auroramc.collections.menu;
 
+import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.aurora.api.menu.ItemBuilder;
 import gg.auroramc.aurora.api.message.Placeholder;
@@ -55,9 +56,12 @@ public class CollectionsMenu {
             new CategoryMenu(player, plugin).open();
         });
 
+        var currentPercentage = AuroraAPI.formatNumber(plugin.getCollectionManager().getCategoryCompletionPercent(category, player) * 100);
+
         menu.addItem(ItemBuilder.of(plugin.getConfigManager().getCategoriesMenuConfig().getItems().get(category))
                 .slot(4)
                 .placeholder(Placeholder.of("{name}", categories.get(category).getName()))
+                .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
                 .build(player));
 
         var collections = getPage(page, config.getDisplayArea().size());
