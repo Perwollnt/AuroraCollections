@@ -1,6 +1,14 @@
+config-version: 1
+
 title: "{category} collections"
 
 rows: 6
+
+# This will be merged with the menu item ih categories.yml. You can use the same placeholders here.
+category-icon:
+  enabled: true
+  item:
+    slot: 4
 
 display-area: [
   10, 11, 12, 13, 14, 15, 16,

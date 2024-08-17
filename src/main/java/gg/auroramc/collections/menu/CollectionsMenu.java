@@ -58,11 +58,14 @@ public class CollectionsMenu {
 
         var currentPercentage = AuroraAPI.formatNumber(plugin.getCollectionManager().getCategoryCompletionPercent(category, player) * 100);
 
-        menu.addItem(ItemBuilder.of(plugin.getConfigManager().getCategoriesMenuConfig().getItems().get(category))
-                .slot(4)
-                .placeholder(Placeholder.of("{name}", categories.get(category).getName()))
-                .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
-                .build(player));
+        if (plugin.getConfigManager().getCollectionListMenuConfig().getCategoryIcon().getEnabled()) {
+            var itemConfig = plugin.getConfigManager().getCategoriesMenuConfig().getItems().get(category).merge(plugin.getConfigManager().getCollectionListMenuConfig().getCategoryIcon().getItem());
+            menu.addItem(ItemBuilder.of(itemConfig)
+                    .placeholder(Placeholder.of("{name}", categories.get(category).getName()))
+                    .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
+                    .build(player));
+        }
+
 
         var collections = getPage(page, config.getDisplayArea().size());
 
