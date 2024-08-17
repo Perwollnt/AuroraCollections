@@ -1,6 +1,7 @@
 package gg.auroramc.collections.hooks.mmolib;
 
 import com.google.common.collect.Maps;
+import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.reward.RewardCorrector;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
@@ -13,6 +14,7 @@ import io.lumine.mythic.lib.player.modifier.ModifierType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -51,6 +53,27 @@ public class MMOStatCorrector implements RewardCorrector {
                                     new MMOStat(statReward.getModifierType(), statReward.getValue(placeholders), key, uuid),
                                     (a, b) -> new MMOStat(statReward.getModifierType(), a.value() + b.value(), a.key(), a.uuid()));
                         }
+                    }
+                }
+            }
+
+            for (var category : manager.getCategories()) {
+                if (!category.isLevelingEnabled()) continue;
+                var rewards = category.getRewards(manager.getCategoryLevel(category.getId(), player), manager.getMaxCategoryLevel(category.getId()));
+
+                List<Placeholder<?>> placeholders = List.of(
+                        Placeholder.of("{category_name}", category.getConfig().getName()),
+                        Placeholder.of("{category_id}", category.getId())
+                );
+
+                for (var reward : rewards) {
+                    if (reward instanceof MMOStatReward statReward && statReward.isValid()) {
+                        var key = NamespacedId.of(MMOStatReward.getMMO_STAT(), statReward.getStat()).toString();
+                        var current = statReward.getCurrentModifier(key, stats);
+                        UUID uuid = current != null ? current.getUniqueId() : UUID.randomUUID();
+                        statMap.merge(statReward.getStat(),
+                                new MMOStat(statReward.getModifierType(), statReward.getValue(placeholders), key, uuid),
+                                (a, b) -> new MMOStat(statReward.getModifierType(), a.value() + b.value(), a.key(), a.uuid()));
                     }
                 }
             }

@@ -15,8 +15,10 @@ public class Category {
     private final CategoriesConfig.CategoryConfig config;
     private final List<CategoryReward> rewards = Lists.newArrayList();
     private final boolean levelingEnabled;
+    private final String id;
 
-    public Category(RewardFactory rewardFactory, CategoriesConfig.CategoryConfig config) {
+    public Category(String id, RewardFactory rewardFactory, CategoriesConfig.CategoryConfig config) {
+        this.id = id;
         this.config = config;
 
         if(config.getLevels() == null || config.getLevels().isEmpty()) {
@@ -46,6 +48,18 @@ public class Category {
         for (var reward : this.rewards) {
             if (reward.percentage() > (prevLevel / (double) totalLevels * 100)
                     && reward.percentage() <= (newLevel / (double) totalLevels * 100)) {
+                rewards.addAll(reward.rewards());
+            }
+        }
+
+        return rewards;
+    }
+
+    public List<Reward> getRewards(int level, int totalLevels) {
+        var rewards = new ArrayList<Reward>();
+
+        for (var reward : this.rewards) {
+            if (reward.percentage() <= (level / (double) totalLevels * 100)) {
                 rewards.addAll(reward.rewards());
             }
         }

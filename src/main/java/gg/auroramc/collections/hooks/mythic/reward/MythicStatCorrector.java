@@ -1,6 +1,7 @@
 package gg.auroramc.collections.hooks.mythic.reward;
 
 import com.google.common.collect.Maps;
+import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.reward.RewardCorrector;
 import gg.auroramc.collections.AuroraCollections;
 import io.lumine.mythic.bukkit.MythicBukkit;
@@ -8,6 +9,7 @@ import io.lumine.mythic.core.skills.stats.StatModifierType;
 import io.lumine.mythic.core.skills.stats.StatType;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,7 +36,7 @@ public class MythicStatCorrector implements RewardCorrector {
                     });
 
             // Gather new stat modifiers
-            for(var collection : manager.getAllCollections()) {
+            for (var collection : manager.getAllCollections()) {
                 var level = collection.getPlayerLevel(player);
 
                 for (int i = 1; i < level + 1; i++) {
@@ -46,6 +48,23 @@ public class MythicStatCorrector implements RewardCorrector {
                             statMap.computeIfAbsent(statReward.getStatType(), (key) -> Maps.newHashMap())
                                     .merge(statReward.getModifierType(), statReward.getValue(placeholders), Double::sum);
                         }
+                    }
+                }
+            }
+
+            for (var category : manager.getCategories()) {
+                if (!category.isLevelingEnabled()) continue;
+                var rewards = category.getRewards(manager.getCategoryLevel(category.getId(), player), manager.getMaxCategoryLevel(category.getId()));
+
+                List<Placeholder<?>> placeholders = List.of(
+                        Placeholder.of("{category_name}", category.getConfig().getName()),
+                        Placeholder.of("{category_id}", category.getId())
+                );
+
+                for (var reward : rewards) {
+                    if (reward instanceof MythicStatReward statReward && statReward.isValid()) {
+                        statMap.computeIfAbsent(statReward.getStatType(), (key) -> Maps.newHashMap())
+                                .merge(statReward.getModifierType(), statReward.getValue(placeholders), Double::sum);
                     }
                 }
             }

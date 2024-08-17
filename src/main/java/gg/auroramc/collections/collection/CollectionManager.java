@@ -56,6 +56,10 @@ public class CollectionManager implements Listener {
         Bukkit.getPluginManager().registerEvents(new ShearListener(plugin), plugin);
     }
 
+    public java.util.Collection<Category> getCategories() {
+        return categoryMap.values();
+    }
+
     public List<Collection> getAllCollections() {
         return categories.values().stream().flatMap(map -> map.values().stream()).toList();
     }
@@ -141,7 +145,7 @@ public class CollectionManager implements Listener {
         }
 
         for (var entry : plugin.getConfigManager().getCategoriesConfig().getCategories().entrySet()) {
-            categoryMap.put(entry.getKey(), new Category(rewardFactory, entry.getValue()));
+            categoryMap.put(entry.getKey(), new Category(entry.getKey(), rewardFactory, entry.getValue()));
         }
     }
 

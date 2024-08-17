@@ -4,11 +4,14 @@ import com.google.common.collect.Maps;
 import dev.aurelium.auraskills.api.AuraSkillsApi;
 import dev.aurelium.auraskills.api.stat.Stat;
 import dev.aurelium.auraskills.api.stat.StatModifier;
+import gg.auroramc.aurora.api.AuroraAPI;
+import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.reward.RewardCorrector;
 import gg.auroramc.collections.AuroraCollections;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,7 +34,7 @@ public class AuraSkillsCorrector implements RewardCorrector {
             }
 
             // Gather new stat modifiers
-            for(var collection : manager.getAllCollections()) {
+            for (var collection : manager.getAllCollections()) {
                 var level = collection.getPlayerLevel(player);
 
                 for (int i = 1; i < level + 1; i++) {
@@ -42,6 +45,23 @@ public class AuraSkillsCorrector implements RewardCorrector {
                         if (reward instanceof AuraSkillsStatReward statReward) {
                             statMap.merge(statReward.getStat(), statReward.getValue(placeholders), Double::sum);
                         }
+                    }
+                }
+            }
+
+
+            for (var category : manager.getCategories()) {
+                if (!category.isLevelingEnabled()) continue;
+                var rewards = category.getRewards(manager.getCategoryLevel(category.getId(), player), manager.getMaxCategoryLevel(category.getId()));
+
+                List<Placeholder<?>> placeholders = List.of(
+                        Placeholder.of("{category_name}", category.getConfig().getName()),
+                        Placeholder.of("{category_id}", category.getId())
+                );
+
+                for (var reward : rewards) {
+                    if (reward instanceof AuraSkillsStatReward statReward) {
+                        statMap.merge(statReward.getStat(), statReward.getValue(placeholders), Double::sum);
                     }
                 }
             }
