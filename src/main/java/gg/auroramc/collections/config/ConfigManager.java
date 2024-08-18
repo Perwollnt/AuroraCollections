@@ -9,6 +9,7 @@ import gg.auroramc.collections.config.menu.CollectionMenuConfig;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -34,7 +35,6 @@ public class ConfigManager {
 
     public ConfigManager(AuroraCollections plugin) {
         this.plugin = plugin;
-        reload();
     }
 
     @SneakyThrows
@@ -84,8 +84,16 @@ public class ConfigManager {
         collections.clear();
         Path collectionsDir = plugin.getDataFolder().toPath().resolve("collections");
 
-        if (!Files.exists(collectionsDir)) {
+        if (!Files.exists(collectionsDir) || !Files.isDirectory(collectionsDir)) {
             return;
+        }
+
+        for (var dir : collectionsDir.toFile().listFiles()) {
+            if(!dir.isDirectory()) {
+                AuroraCollections.logger().warning("File " + dir.getName() + " is in the collections directory, but should be in a category subdirectory");
+            } else if(!categoriesConfig.getCategories().keySet().contains(dir.getName())) {
+                AuroraCollections.logger().warning("Category " + dir.getName() + " does not exist in categories.yml");
+            }
         }
 
         for (var dir : categoriesConfig.getCategories().keySet()) {

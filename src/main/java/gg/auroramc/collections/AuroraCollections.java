@@ -35,6 +35,7 @@ public final class AuroraCollections extends JavaPlugin {
     public void onLoad() {
         configManager = new ConfigManager(this);
         l = AuroraAPI.createLogger("AuroraCollections", () -> configManager.getConfig().getDebug());
+        configManager.reload();
         HookManager.loadHooks(this);
 
         for (var entry : configManager.getCollections().entrySet()) {

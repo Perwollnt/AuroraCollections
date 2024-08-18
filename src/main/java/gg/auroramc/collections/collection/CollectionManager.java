@@ -146,6 +146,9 @@ public class CollectionManager implements Listener {
 
         for (var entry : plugin.getConfigManager().getCategoriesConfig().getCategories().entrySet()) {
             categoryMap.put(entry.getKey(), new Category(entry.getKey(), rewardFactory, entry.getValue()));
+            if(!categories.containsKey(entry.getKey())) {
+                categories.put(entry.getKey(), Maps.newConcurrentMap());
+            }
         }
     }
 
