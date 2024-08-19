@@ -62,6 +62,7 @@ public class MMOStatCorrector implements RewardCorrector {
                 var rewards = category.getRewards(manager.getCategoryLevel(category.getId(), player), manager.getMaxCategoryLevel(category.getId()));
 
                 List<Placeholder<?>> placeholders = List.of(
+                        Placeholder.of("{player}", player.getName()),
                         Placeholder.of("{category_name}", category.getConfig().getName()),
                         Placeholder.of("{category_id}", category.getId())
                 );
