@@ -76,6 +76,7 @@ public class CategoryRewardsMenu {
             var itemConfig = completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
 
             List<Placeholder<?>> placeholders = List.of(
+                    Placeholder.of("{player}", player.getName()),
                     Placeholder.of("{category_name}", cf.getName()),
                     Placeholder.of("{category_id}", this.category),
                     Placeholder.of("{percent}", AuroraAPI.formatNumber(reward.percentage())),

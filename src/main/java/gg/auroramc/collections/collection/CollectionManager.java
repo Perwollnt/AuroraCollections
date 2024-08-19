@@ -178,6 +178,7 @@ public class CollectionManager implements Listener {
         }
 
         List<Placeholder<?>> placeholders = List.of(
+                Placeholder.of("{player}", player.getName()),
                 Placeholder.of("{category_name}", categoryMap.get(categoryId).getConfig().getName()),
                 Placeholder.of("{category_id}", categoryId),
                 Placeholder.of("{percent}", AuroraAPI.formatNumber(highestPercent))
