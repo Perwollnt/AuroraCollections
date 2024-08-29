@@ -39,6 +39,14 @@ public final class AuroraCollections extends JavaPlugin {
         HookManager.loadHooks(this);
 
         for (var entry : configManager.getCollections().entrySet()) {
+            AuroraAPI.getLeaderboards().registerBoard(
+                    "cc_" + entry.getKey(),
+                    (user) -> collectionManager.getCollectionsByCategory(entry.getKey()).stream().mapToDouble((collection) -> user.getData(CollectionData.class).getCollectionCount(collection.getCategory(), collection.getId())).sum(),
+                    (lb) -> AuroraAPI.formatNumberShort(((Double) lb.getValue()).longValue()),
+                    configManager.getConfig().getLeaderboard().getCacheSize(),
+                    configManager.getConfig().getLeaderboard().getMinItemsCollected().doubleValue()
+            );
+
             for (var id : entry.getValue().keySet()) {
                 AuroraAPI.getLeaderboards().registerBoard(
                         entry.getKey() + "_" + id,

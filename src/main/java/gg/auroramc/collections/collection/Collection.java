@@ -218,14 +218,13 @@ public class Collection {
                 Placeholder.of("{required}", requirement),
                 Placeholder.of("{required_formatted}", AuroraAPI.formatNumber(requirement)),
                 Placeholder.of("{total}", data.getCollectionCount(category, id)),
-                Placeholder.of("{total_formatted}", AuroraAPI.formatNumber(data.getCollectionCount(category, id)))
+                Placeholder.of("{total_formatted}", AuroraAPI.formatNumber(data.getCollectionCount(category, id))),
+                Placeholder.of("{total_short}", AuroraAPI.formatNumberShort(data.getCollectionCount(category, id)))
         );
 
         var boardName = category + "_" + id;
         var lb = user.getLeaderboardEntries().get(boardName);
         var lbm = AuroraAPI.getLeaderboards();
-
-        AuroraAPI.formatNumber(Math.max(AuroraAPI.getLeaderboards().getBoardSize("levels"), lb == null ? Bukkit.getOnlinePlayers().size() : lb.getPosition()));
 
         if (lb != null && lb.getPosition() != 0) {
             placeholders.add(Placeholder.of("{lb_position}", AuroraAPI.formatNumber(lb.getPosition())));
@@ -256,5 +255,9 @@ public class Collection {
 
     public void progress(Player player, TypeId type) {
         progress(player, type, 1);
+    }
+
+    public Long getCount(Player player) {
+        return AuroraAPI.getUserManager().getUser(player).getData(CollectionData.class).getCollectionCount(category, id);
     }
 }

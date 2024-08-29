@@ -120,6 +120,7 @@ public class CollectionManager implements Listener {
                     if (Arrays.stream(triggers).anyMatch(trigger -> collection.getConfig().getParsedTriggers().contains(trigger))) {
                         collection.progress(player, type, amount);
                         toUpdate.add(collection.getCategory() + "_" + collection.getId());
+                        toUpdate.add("cc_" + collection.getCategory());
                     }
                 }
             }
