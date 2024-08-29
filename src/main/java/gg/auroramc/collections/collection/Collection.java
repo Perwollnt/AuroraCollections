@@ -1,6 +1,7 @@
 package gg.auroramc.collections.collection;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.config.premade.IntervalMatcherConfig;
 import gg.auroramc.aurora.api.item.TypeId;
@@ -73,6 +74,45 @@ public class Collection {
 
     public long getRequiredAmount(long level) {
         return config.getRequirements().size() < level ? config.getRequirements().getLast() : config.getRequirements().get((int) level - 1);
+    }
+
+    public void resetProgress(Player player) {
+        var user = AuroraAPI.getUserManager().getUser(player);
+        if (!user.isLoaded()) return;
+        var data = user.getData(CollectionData.class);
+        if (data.getCache().get(category) == null) return;
+        data.getCache().get(category).remove(id);
+        data.setDirty();
+        AuroraAPI.getLeaderboards().updateUser(user, category + "_" + id);
+    }
+
+    public void removeProgress(Player player, int amount) {
+        var user = AuroraAPI.getUserManager().getUser(player);
+        if (!user.isLoaded()) return;
+        var data = user.getData(CollectionData.class);
+        if (data.getCache().get(category) == null) return;
+        data.getCache().get(category).compute(id, (k, current) -> Math.max(0L, (current == null ? 0 : current) - amount));
+        if (data.getCache().get(category).get(id) == 0) data.getCache().get(category).remove(id);
+        data.setDirty();
+        AuroraAPI.getLeaderboards().updateUser(user, category + "_" + id);
+    }
+
+    public void setProgress(Player player, int amount) {
+        var user = AuroraAPI.getUserManager().getUser(player);
+        if (!user.isLoaded()) return;
+        var data = user.getData(CollectionData.class);
+        var current = data.getCollectionCount(category, id);
+        if (amount == 0) {
+            resetProgress(player);
+            return;
+        }
+        if (amount <= current) {
+            data.getCache().computeIfAbsent(category, k -> Maps.newConcurrentMap()).put(id, (long) amount);
+            data.setDirty();
+        } else {
+            progress(player, null, ((Long) (amount - current)).intValue());
+        }
+        AuroraAPI.getLeaderboards().updateUser(user, category + "_" + id);
     }
 
     public synchronized void progress(Player player, @Nullable TypeId type, int amount) {

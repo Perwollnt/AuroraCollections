@@ -6,6 +6,7 @@ import co.aikar.commands.PaperCommandManager;
 import gg.auroramc.aurora.api.message.Chat;
 import gg.auroramc.aurora.api.message.Text;
 import gg.auroramc.collections.AuroraCollections;
+import gg.auroramc.collections.collection.Collection;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 
@@ -31,13 +32,15 @@ public class CommandManager {
             commandManager.usePerIssuerLocale(false);
 
             var aliases = plugin.getConfigManager().getConfig().getCommandAliases();
-            var config = plugin.getConfigManager().getCategoriesConfig();
 
+            commandManager.getCommandCompletions().registerCompletion("categories",
+                    c -> plugin.getConfigManager().getCategoriesConfig().getCategories().keySet());
 
-            commandManager.getCommandCompletions().registerCompletion("categories", c -> {
-                var categoryCompletions = new ArrayList<>(config.getCategories().keySet());
-                categoryCompletions.add("none");
-                return categoryCompletions;
+            commandManager.getCommandCompletions().registerCompletion("collections", c -> {
+                var manager = plugin.getCollectionManager();
+                var category = c.getContextValue(String.class);
+                if (!manager.hasCategory(category)) return List.of();
+                return manager.getCollectionsByCategory(category).stream().map(Collection::getId).toList();
             });
 
             commandManager.getCommandReplacements().addReplacement("collectionsAlias", a(aliases.getCollections()));

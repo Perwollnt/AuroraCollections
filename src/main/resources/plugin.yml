@@ -27,3 +27,7 @@ permissions:
     children:
       - aurora.collections.admin.reload
       - aurora.collections.admin.open
+      - aurora.collections.admin.reset
+      - aurora.collections.admin.set
+      - aurora.collections.admin.remove
+      - aurora.collections.admin.add
