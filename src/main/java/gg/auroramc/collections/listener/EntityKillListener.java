@@ -1,7 +1,6 @@
 package gg.auroramc.collections.listener;
 
 import gg.auroramc.aurora.api.AuroraAPI;
-import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
 import org.bukkit.entity.Player;
@@ -33,7 +32,7 @@ public class EntityKillListener implements Listener {
         manager.progressCollections(killer, mobId, 1, Trigger.ENTITY_KILL);
 
         for (var drop : drops) {
-            manager.progressCollections(killer, TypeId.from(drop.getType()), drop.getAmount(), Trigger.ENTITY_LOOT);
+            manager.progressCollections(killer, plugin.getItemManager().resolveId(drop), drop.getAmount(), Trigger.ENTITY_LOOT);
         }
     }
 }
