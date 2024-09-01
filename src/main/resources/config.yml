@@ -16,6 +16,7 @@ leaderboard:
 # Always keep at least one alias for each command
 command-aliases:
   collections: ["collections", "collection"]
+  progression: ["progression"]
 
 display-components:
   rewards:
@@ -24,6 +25,7 @@ display-components:
 
 level-up-message:
   enabled: true
+  open-menu-when-clicked: true
   message:
     - "&3&m----------------------------------------&r"
     - ' '
@@ -35,6 +37,7 @@ level-up-message:
 
 category-level-up-message:
   enabled: true
+  open-menu-when-clicked: true
   message:
     - "&3&m----------------------------------------&r"
     - ' '

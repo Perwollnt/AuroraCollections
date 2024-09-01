@@ -37,6 +37,7 @@ public class Config extends AuroraConfig {
     @Getter
     public static final class CommandAliasConfig {
         private List<String> collections = List.of("collections");
+        private List<String> progression = List.of("progression");
     }
 
     @Getter
@@ -48,6 +49,7 @@ public class Config extends AuroraConfig {
     @Getter
     public static final class LevelUpMessage {
         private Boolean enabled;
+        private Boolean openMenuWhenClicked = false;
         private List<String> message;
     }
 
@@ -87,6 +89,15 @@ public class Config extends AuroraConfig {
                     ));
 
                     yaml.set("config-version", 1);
+                },
+                (yaml) -> {
+                    yaml.set("config-version", null);
+
+                    yaml.set("level-up-message.open-menu-when-clicked", true);
+                    yaml.set("category-level-up-message.open-menu-when-clicked", true);
+                    yaml.set("command-aliases.progression", List.of("progression"));
+
+                    yaml.set("config-version", 2);
                 }
         );
     }

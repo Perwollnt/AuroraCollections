@@ -44,6 +44,7 @@ public class CommandManager {
             });
 
             commandManager.getCommandReplacements().addReplacement("collectionsAlias", a(aliases.getCollections()));
+            commandManager.getCommandReplacements().addReplacement("progressionAlias", a(aliases.getProgression()));
         }
 
         var msg = plugin.getConfigManager().getMessageConfig();

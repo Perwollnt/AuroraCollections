@@ -8,7 +8,9 @@ import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Collection;
 import gg.auroramc.collections.menu.CategoryMenu;
+import gg.auroramc.collections.menu.CategoryRewardsMenu;
 import gg.auroramc.collections.menu.CollectionsMenu;
+import gg.auroramc.collections.menu.ProgressionMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -54,6 +56,24 @@ public class CollectionsCommand extends BaseCommand {
 
         if (!silent) {
             Chat.sendMessage(sender, plugin.getConfigManager().getMessageConfig().getMenuOpened(), Placeholder.of("{player}", target.getName()));
+        }
+    }
+
+    @Subcommand("%progressionAlias")
+    @Description("Opens the collection progression menu for another player")
+    @CommandCompletion("@categories @collections|none")
+    @CommandPermission("aurora.collections.use.open")
+    public void onOpenProgressionMenu(Player sender, String category, @Default("none") String collectionId) {
+        if (collectionId.equals("none")) {
+            if (!plugin.getCollectionManager().hasCategory(category)) return;
+            if (plugin.getCollectionManager().getCategory(category).isLevelingEnabled()) {
+                new CategoryRewardsMenu(sender, plugin, category).open();
+            }
+        } else {
+            var collection = plugin.getCollectionManager().getCollection(category, collectionId);
+            if (collection == null) return;
+
+            new ProgressionMenu(sender, plugin, collection).open();
         }
     }
 

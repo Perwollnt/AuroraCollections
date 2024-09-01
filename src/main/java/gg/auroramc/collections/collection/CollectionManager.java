@@ -17,6 +17,7 @@ import gg.auroramc.collections.listener.*;
 import gg.auroramc.collections.reward.corrector.CommandCorrector;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -147,7 +148,7 @@ public class CollectionManager implements Listener {
 
         for (var entry : plugin.getConfigManager().getCategoriesConfig().getCategories().entrySet()) {
             categoryMap.put(entry.getKey(), new Category(entry.getKey(), rewardFactory, entry.getValue()));
-            if(!categories.containsKey(entry.getKey())) {
+            if (!categories.containsKey(entry.getKey())) {
                 categories.put(entry.getKey(), Maps.newConcurrentMap());
             }
         }
@@ -175,8 +176,8 @@ public class CollectionManager implements Listener {
         double highestPercent = 0;
 
         var currentPercent = getCategoryCompletionPercent(categoryId, player) * 100;
-        for(var r : category.getRewards()) {
-            if(r.percentage() > highestPercent && currentPercent >= r.percentage()) {
+        for (var r : category.getRewards()) {
+            if (r.percentage() > highestPercent && currentPercent >= r.percentage()) {
                 highestPercent = r.percentage();
             }
         }
@@ -211,6 +212,13 @@ public class CollectionManager implements Listener {
                 }
 
                 if (!line.equals(messageLines.getLast())) text.append(Component.newline());
+            }
+
+            if (lvlUpMsg.getOpenMenuWhenClicked()) {
+                text.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND,
+                        "/" + mainConfig.getCommandAliases().getCollections().get(0) + " " +
+                                mainConfig.getCommandAliases().getProgression().get(0) + " " +
+                                category.getId()));
             }
 
             Chat.sendMessage(player, text.build());

@@ -17,6 +17,7 @@ import gg.auroramc.collections.config.CollectionConfig;
 import gg.auroramc.collections.util.RomanNumber;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -168,6 +169,12 @@ public class Collection {
             }
 
             if (mainConfig.getLevelUpMessage().getEnabled()) {
+                if (mainConfig.getLevelUpMessage().getOpenMenuWhenClicked()) {
+                    text.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND,
+                            "/" + mainConfig.getCommandAliases().getCollections().get(0) + " " +
+                                    mainConfig.getCommandAliases().getProgression().get(0) + " " +
+                                    category + " " + id));
+                }
                 Chat.sendMessage(player, text.build());
             }
 
