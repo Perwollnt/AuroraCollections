@@ -144,7 +144,9 @@ public class Collection {
 
             var rewards = matcher.computeRewards(i);
 
+            int count = 0;
             for (var line : messageLines) {
+                count++;
                 if (line.equals("component:rewards")) {
 
                     if (!rewards.isEmpty()) {
@@ -159,7 +161,7 @@ public class Collection {
                     text.append(Text.component(player, line, placeholders));
                 }
 
-                if (!line.equals(messageLines.getLast())) text.append(Component.newline());
+                if (messageLines.size() != count) text.append(Component.newline());
             }
 
 

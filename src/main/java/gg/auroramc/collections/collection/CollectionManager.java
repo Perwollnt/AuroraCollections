@@ -191,12 +191,14 @@ public class CollectionManager implements Listener {
 
         var lvlUpMsg = plugin.getConfigManager().getConfig().getCategoryLevelUpMessage();
 
+        int count = 0;
         if (lvlUpMsg.getEnabled()) {
             var text = Component.text();
             var messageLines = lvlUpMsg.getMessage();
             var mainConfig = plugin.getConfigManager().getConfig();
 
             for (var line : messageLines) {
+                count++;
                 if (line.equals("component:rewards")) {
 
                     if (!rewards.isEmpty()) {
@@ -211,7 +213,7 @@ public class CollectionManager implements Listener {
                     text.append(Text.component(player, line, placeholders));
                 }
 
-                if (!line.equals(messageLines.getLast())) text.append(Component.newline());
+                if (count != messageLines.size()) text.append(Component.newline());
             }
 
             if (lvlUpMsg.getOpenMenuWhenClicked()) {
