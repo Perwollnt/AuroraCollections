@@ -1,5 +1,7 @@
 package gg.auroramc.collections.menu;
 
+import gg.auroramc.aurora.api.levels.ConcreteMatcher;
+import gg.auroramc.aurora.api.levels.IntervalMatcher;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.aurora.api.menu.ItemBuilder;
 import gg.auroramc.aurora.api.message.Placeholder;
@@ -77,11 +79,18 @@ public class ProgressionMenu {
             var requirement = requirements.get(i);
             var level = collection.getConfig().getRequirements().indexOf(requirement) + 1;
             var completed = collection.getPlayerLevel(player) >= level;
+            var matcher = collection.getLevelMatcher().getBestMatcher(level);
             var itemConfig = completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
-            var placeholders = collection.getPlaceholders(player, level);
 
+            if (matcher instanceof IntervalMatcher intervalMatcher) {
+                itemConfig = itemConfig.merge(intervalMatcher.getConfig().getItem().get(completed ? "completed-level" : "locked-level"));
+            } else if (matcher instanceof ConcreteMatcher concreteMatcher) {
+                itemConfig = itemConfig.merge(concreteMatcher.getConfig().getItem().get(completed ? "completed-level" : "locked-level"));
+            }
+
+            var placeholders = collection.getPlaceholders(player, level);
             var lore = new ArrayList<String>();
-            var rewards = collection.getLevelMatcher().getBestMatcher(level).computeRewards(level);
+            var rewards = matcher.computeRewards(level);
 
             for (var line : itemConfig.getLore()) {
                 if (line.equals("component:rewards")) {
