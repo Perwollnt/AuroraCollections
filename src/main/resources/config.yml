@@ -70,4 +70,4 @@ global-level-matchers:
         display: "&8+&b{value_formatted} Global XP"
 
 # Don't touch this unless you know what you're doing
-config-version: 1
+config-version: 2
