@@ -2,6 +2,7 @@ package gg.auroramc.collections.hooks;
 
 import gg.auroramc.collections.hooks.auraskills.AuraSkillsHook;
 import gg.auroramc.collections.hooks.auroralevels.AuroraLevelsHook;
+import gg.auroramc.collections.hooks.beeminions.BeeMinionsHook;
 import gg.auroramc.collections.hooks.customfishing.CustomFishingHook;
 import gg.auroramc.collections.hooks.luckperms.LuckPermsHook;
 import gg.auroramc.collections.hooks.mmoitems.MMOItemsHook;
@@ -23,7 +24,8 @@ public enum Hooks {
     ORAXEN(OraxenHook.class, "Oraxen"),
     WORLD_GUARD(WorldGuardHook.class, "WorldGuard"),
     MMOLIB(MMOLibHook.class, "MythicLib"),
-    TOP_MINIONS(TopMinionsHook.class, "TopMinion");
+    TOP_MINIONS(TopMinionsHook.class, "TopMinion"),
+    BEE_MINIONS(BeeMinionsHook.class, "BeeMinions");
 
     private final Class<? extends Hook> clazz;
     private final String plugin;

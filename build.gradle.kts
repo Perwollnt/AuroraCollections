@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "gg.auroramc"
-version = "1.3.0"
+version = "1.3.1"
 
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
@@ -50,6 +50,7 @@ dependencies {
     compileOnly("net.Indyuce:MMOItems-API:6.10-SNAPSHOT")
     compileOnly("io.th0rgal:oraxen:2.0-SNAPSHOT")
     compileOnly("com.sarry20:TopMinion:2.3.2")
+    compileOnly("org.me.leo_s:BeeMinions:2.0.9-BETA")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 

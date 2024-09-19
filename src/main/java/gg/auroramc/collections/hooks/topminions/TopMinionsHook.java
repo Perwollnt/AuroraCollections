@@ -17,7 +17,7 @@ public class TopMinionsHook implements Hook, Listener {
     @Override
     public void hook(AuroraCollections plugin) {
         this.plugin = plugin;
-        AuroraCollections.logger().info("Hooked into TopMinions with trigger: MINION_LOOT");
+        AuroraCollections.logger().info("Hooked into TopMinions with trigger: minion_loot");
     }
 
 
