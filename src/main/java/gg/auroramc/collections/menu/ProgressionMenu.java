@@ -53,6 +53,10 @@ public class ProgressionMenu {
             menu.addItem(ItemBuilder.of(customItem).build(player));
         }
 
+        for (var customItem : collection.getConfig().getCustomMenuItems().values()) {
+            menu.addItem(ItemBuilder.of(customItem).build(player));
+        }
+
         var items = config.getItems();
 
         menu.addItem(ItemBuilder.back(items.getBack()).build(player), (e) -> {

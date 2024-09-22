@@ -26,6 +26,7 @@ public class CollectionConfig extends AuroraConfig {
     private Map<String, IntervalMatcherConfig> levelMatchers;
     private Map<String, ConcreteMatcherConfig> customLevels;
     private ItemConfig menuItem;
+    private Map<String, ItemConfig> customMenuItems;
 
     @IgnoreField
     private Set<TypeId> parsedTypes;
