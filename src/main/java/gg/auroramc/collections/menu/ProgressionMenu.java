@@ -49,12 +49,14 @@ public class ProgressionMenu {
             menu.addFiller(ItemBuilder.filler(Material.AIR));
         }
 
+        var currentPlaceholders = collection.getPlaceholders(player, collection.getPlayerLevel(player));
+
         for (var customItem : config.getCustomItems().values()) {
-            menu.addItem(ItemBuilder.of(customItem).build(player));
+            menu.addItem(ItemBuilder.of(customItem).placeholder(currentPlaceholders).build(player));
         }
 
         for (var customItem : collection.getConfig().getCustomMenuItems().values()) {
-            menu.addItem(ItemBuilder.of(customItem).build(player));
+            menu.addItem(ItemBuilder.of(customItem).placeholder(currentPlaceholders).build(player));
         }
 
         var items = config.getItems();
