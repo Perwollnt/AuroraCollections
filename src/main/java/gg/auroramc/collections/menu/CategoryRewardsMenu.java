@@ -64,7 +64,7 @@ public class CategoryRewardsMenu {
 
         var currentPercentage = plugin.getCollectionManager().getCategoryCompletionPercent(this.category, player) * 100;
 
-
+        boolean previousCompleted = true;
         for (int i = 0; i < config.getDisplayArea().size(); i++) {
             var slot = config.getDisplayArea().get(i);
             if (rewards.size() == i) {
@@ -73,7 +73,12 @@ public class CategoryRewardsMenu {
             var reward = rewards.get(i);
 
             var completed = currentPercentage >= reward.percentage();
-            var itemConfig = completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
+            var inProgress = !completed && previousCompleted;
+            previousCompleted = completed;
+
+            var itemConfig = inProgress ? config.getItems().getNextLevel() : completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
+
+            itemConfig = itemConfig.merge(reward.items().get(inProgress ? "next-level" : completed ? "completed-level" : "locked-level"));
 
             List<Placeholder<?>> placeholders = List.of(
                     Placeholder.of("{player}", player.getName()),

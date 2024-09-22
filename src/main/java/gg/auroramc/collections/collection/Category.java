@@ -36,7 +36,7 @@ public class Category {
                 reward.ifPresent(parsedRewards::add);
             }
 
-            rewards.add(new CategoryReward(levelConfig.getPercentage(), parsedRewards));
+            rewards.add(new CategoryReward(levelConfig.getPercentage(), parsedRewards, levelConfig.getItem()));
         }
 
         rewards.sort(Comparator.comparingDouble(CategoryReward::percentage));

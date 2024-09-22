@@ -51,6 +51,15 @@ items:
       - ""
       - "&c&lɴᴏᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ"
     material: RED_STAINED_GLASS_PANE
+  next-level:
+    name: "&f{category_name} &6{percent}%"
+    lore:
+      - "&8You are almost there!"
+      - ""
+      - "&7Progress: &e{progress_percent}&6%"
+      - ""
+      - "component:rewards"
+    material: YELLOW_STAINED_GLASS_PANE
 
 custom-items:
   close:

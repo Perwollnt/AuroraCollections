@@ -4,10 +4,12 @@ import gg.auroramc.aurora.api.config.AuroraConfig;
 import gg.auroramc.aurora.api.config.premade.ItemConfig;
 import gg.auroramc.collections.AuroraCollections;
 import lombok.Getter;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Getter
 public class CollectionMenuConfig extends AuroraConfig {
@@ -46,6 +48,7 @@ public class CollectionMenuConfig extends AuroraConfig {
         private ItemConfig nextPage;
         private ItemConfig completedLevel;
         private ItemConfig lockedLevel;
+        private ItemConfig nextLevel;
         private ItemConfig back;
     }
 
@@ -72,4 +75,14 @@ public class CollectionMenuConfig extends AuroraConfig {
         }
     }
 
+    @Override
+    protected List<Consumer<YamlConfiguration>> getMigrationSteps() {
+        return List.of(
+                (yaml) -> {
+                    yaml.set("config-version", null);
+                    yaml.set("items.next-level", yaml.getConfigurationSection("items.locked-level"));
+                    yaml.set("config-version", 1);
+                }
+        );
+    }
 }

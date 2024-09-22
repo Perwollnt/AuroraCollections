@@ -78,14 +78,16 @@ public class ProgressionMenu {
 
             var requirement = requirements.get(i);
             var level = collection.getConfig().getRequirements().indexOf(requirement) + 1;
-            var completed = collection.getPlayerLevel(player) >= level;
+            var playerLevel = collection.getPlayerLevel(player);
+            var completed =  playerLevel >= level;
+            var inProgress = playerLevel + 1 == level;
             var matcher = collection.getLevelMatcher().getBestMatcher(level);
-            var itemConfig = completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
+            var itemConfig = inProgress ? config.getItems().getNextLevel() : completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
 
             if (matcher instanceof IntervalMatcher intervalMatcher) {
-                itemConfig = itemConfig.merge(intervalMatcher.getConfig().getItem().get(completed ? "completed-level" : "locked-level"));
+                itemConfig = itemConfig.merge(intervalMatcher.getConfig().getItem().get(inProgress ? "next-level" : completed ? "completed-level" : "locked-level"));
             } else if (matcher instanceof ConcreteMatcher concreteMatcher) {
-                itemConfig = itemConfig.merge(concreteMatcher.getConfig().getItem().get(completed ? "completed-level" : "locked-level"));
+                itemConfig = itemConfig.merge(concreteMatcher.getConfig().getItem().get(inProgress ? "next-level" : completed ? "completed-level" : "locked-level"));
             }
 
             var placeholders = collection.getPlaceholders(player, level);

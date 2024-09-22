@@ -91,6 +91,16 @@ items:
     - ""
     - "&c&lɴᴏᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ"
     material: RED_STAINED_GLASS_PANE
+  next-level:
+    name: "&f{collection_name} {level}"
+    lore:
+    - "&8You are almost there!"
+    - ""
+    - "&7Progress: &e{progress_percent}&6%"
+    - "&r{progressbar} &e{current_formatted}&6/&e{required_formatted}"
+    - ""
+    - "component:rewards"
+    material: YELLOW_STAINED_GLASS_PANE
 
 custom-items:
   close:

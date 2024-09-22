@@ -1,6 +1,7 @@
 package gg.auroramc.collections.config;
 
 import gg.auroramc.aurora.api.config.AuroraConfig;
+import gg.auroramc.aurora.api.config.premade.ItemConfig;
 import gg.auroramc.collections.AuroraCollections;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,6 +26,7 @@ public class CategoriesConfig extends AuroraConfig {
     @Getter
     public static class LevelConfig {
         private Double percentage;
+        private Map<String, ItemConfig> item;
         private ConfigurationSection rewards;
     }
 
