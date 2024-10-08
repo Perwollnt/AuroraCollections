@@ -18,6 +18,7 @@ import gg.auroramc.collections.util.RomanNumber;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -137,11 +138,12 @@ public class Collection {
         }
 
         var mainConfig = plugin.getConfigManager().getConfig();
+        var rawName = Placeholder.of("{collection_name_raw}", PlainTextComponentSerializer.plainText().serialize(Text.component(this.config.getName())));
 
         for (int i = oldLevel + 1; i <= newLevel; i++) {
             var matcher = levelMatcher.getBestMatcher(newLevel);
             var placeholders = getPlaceholders(player, oldLevel, newLevel);
-
+            placeholders.add(rawName);
 
             var text = Component.text();
             var messageLines = mainConfig.getLevelUpMessage().getMessage();
