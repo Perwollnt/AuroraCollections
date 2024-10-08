@@ -4,9 +4,12 @@ import gg.auroramc.aurora.api.config.AuroraConfig;
 import gg.auroramc.aurora.api.config.premade.ItemConfig;
 import gg.auroramc.collections.AuroraCollections;
 import lombok.Getter;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Getter
 public class CategoriesMenuConfig extends AuroraConfig {
@@ -15,6 +18,7 @@ public class CategoriesMenuConfig extends AuroraConfig {
     private Map<String, ItemConfig> items;
     private Map<String, ItemConfig> customItems;
     private Integer rows = 6;
+    private CollectionMenuConfig.ProgressBar progressBar;
 
     @Getter
     public static final class FillerItem {
@@ -34,5 +38,18 @@ public class CategoriesMenuConfig extends AuroraConfig {
         if (!getFile(plugin).exists()) {
             plugin.saveResource("menus/categories.yml", false);
         }
+    }
+
+    @Override
+    protected List<Consumer<YamlConfiguration>> getMigrationSteps() {
+        return List.of(
+                (yaml) -> {
+                    yaml.set("config-version", null);
+                    yaml.set("progress-bar.length", 10);
+                    yaml.set("progress-bar.filled-character", "&a&l■");
+                    yaml.set("progress-bar.unfilled-character", "&7&l■");
+                    yaml.set("config-version", 1);
+                }
+        );
     }
 }

@@ -90,10 +90,12 @@ public class ProgressionMenu {
             var matcher = collection.getLevelMatcher().getBestMatcher(level);
             var itemConfig = inProgress ? config.getItems().getNextLevel() : completed ? config.getItems().getCompletedLevel() : config.getItems().getLockedLevel();
 
+            var mergeKey = inProgress ? "next-level" : completed ? "completed-level" : "locked-level";
+
             if (matcher instanceof IntervalMatcher intervalMatcher) {
-                itemConfig = itemConfig.merge(intervalMatcher.getConfig().getItem().get(inProgress ? "next-level" : completed ? "completed-level" : "locked-level"));
+                itemConfig = itemConfig.merge(intervalMatcher.getConfig().getItem().get(mergeKey));
             } else if (matcher instanceof ConcreteMatcher concreteMatcher) {
-                itemConfig = itemConfig.merge(concreteMatcher.getConfig().getItem().get(inProgress ? "next-level" : completed ? "completed-level" : "locked-level"));
+                itemConfig = itemConfig.merge(concreteMatcher.getConfig().getItem().get(mergeKey));
             }
 
             var placeholders = collection.getPlaceholders(player, level);

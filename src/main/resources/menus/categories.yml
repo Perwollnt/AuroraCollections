@@ -2,6 +2,11 @@ title: "Collections"
 
 rows: 6
 
+progress-bar:
+  length: 10
+  filled-character: "&a&l■"
+  unfilled-character: "&7&l■"
+
 filler:
   enabled: true
   item:
@@ -21,6 +26,9 @@ items:
       - "&8You are in the top &a{lb_position_percent}%&8 of &7{lb_size}"
       - "&8players!"
       - ""
+      - "&7Collections maxed out: &a{maxed_progress_percent}%"
+      - "{maxed_progressbar} &e{maxed_collection_count}&6/&e{total_collection_count}"
+      - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
     material: WHEAT
@@ -36,6 +44,9 @@ items:
       - "&8Global ranking: &8#&a{lb_position}"
       - "&8You are in the top &a{lb_position_percent}%&8 of &7{lb_size}"
       - "&8players!"
+      - ""
+      - "&7Collections maxed out: &a{maxed_progress_percent}%"
+      - "{maxed_progressbar} &e{maxed_collection_count}&6/&e{total_collection_count}"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
@@ -55,6 +66,9 @@ items:
       - "&8You are in the top &a{lb_position_percent}%&8 of &7{lb_size}"
       - "&8players!"
       - ""
+      - "&7Collections maxed out: &a{maxed_progress_percent}%"
+      - "{maxed_progressbar} &e{maxed_collection_count}&6/&e{total_collection_count}"
+      - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
     material: DIAMOND_SWORD
@@ -73,6 +87,9 @@ items:
       - "&8You are in the top &a{lb_position_percent}%&8 of &7{lb_size}"
       - "&8players!"
       - ""
+      - "&7Collections maxed out: &a{maxed_progress_percent}%"
+      - "{maxed_progressbar} &e{maxed_collection_count}&6/&e{total_collection_count}"
+      - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"
     material: OAK_LEAVES
@@ -88,6 +105,9 @@ items:
       - "&8Global ranking: &8#&a{lb_position}"
       - "&8You are in the top &a{lb_position_percent}%&8 of &7{lb_size}"
       - "&8players!"
+      - ""
+      - "&7Collections maxed out: &a{maxed_progress_percent}%"
+      - "{maxed_progressbar} &e{maxed_collection_count}&6/&e{total_collection_count}"
       - ""
       - "&eLeft click to view!"
       - "&eRight click to view rewards!"

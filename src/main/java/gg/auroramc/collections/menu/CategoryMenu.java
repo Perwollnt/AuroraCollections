@@ -6,6 +6,7 @@ import gg.auroramc.aurora.api.menu.ItemBuilder;
 import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
+import gg.auroramc.collections.collection.Collection;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -48,7 +49,8 @@ public class CategoryMenu {
         for (var item : config.getItems().entrySet()) {
             var category = item.getKey();
             var categoryName = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category).getName();
-            var currentPercentage = AuroraAPI.formatNumber(plugin.getCollectionManager().getCategoryCompletionPercent(category, player) * 100);
+            var percentRaw = plugin.getCollectionManager().getCategoryCompletionPercent(category, player);
+            var currentPercentage = AuroraAPI.formatNumber(percentRaw * 100);
 
             List<Placeholder<?>> placeholders = new ArrayList<>();
 
@@ -78,9 +80,29 @@ public class CategoryMenu {
             placeholders.add(Placeholder.of("{total}", totalCollected));
             placeholders.add(Placeholder.of("{total_short}", AuroraAPI.formatNumberShort(totalCollected)));
 
+            var collectionsInCategory = plugin.getCollectionManager().getCollectionsByCategory(category);
+            var maxedCollections = collectionsInCategory.stream().filter(c -> c.isMaxed(player)).count();
+            var maxedPercent = Math.min((double) maxedCollections / collectionsInCategory.size(), 1);
+
+            var bar = config.getProgressBar();
+            var pcs = bar.getLength();
+
+            var completedPercent = Math.min(percentRaw, 1);
+            var completedPcs = ((Double) Math.floor(pcs * completedPercent)).intValue();
+            var remainingPcs = pcs - completedPcs;
+
+            var maxedCompletedPercent = Math.min(maxedPercent, 1);
+            var maxedCompletedPcs = ((Double) Math.floor(pcs * maxedCompletedPercent)).intValue();
+            var maxedRemainingPcs = pcs - maxedCompletedPcs;
+
             menu.addItem(ItemBuilder.of(item.getValue())
                             .placeholder(Placeholder.of("{name}", categoryName))
                             .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
+                            .placeholder(Placeholder.of("{progressbar}", bar.getFilledCharacter().repeat(completedPcs) + bar.getUnfilledCharacter().repeat(remainingPcs) + "&r"))
+                            .placeholder(Placeholder.of("{maxed_progressbar}", bar.getFilledCharacter().repeat(maxedCompletedPcs) + bar.getUnfilledCharacter().repeat(maxedRemainingPcs) + "&r"))
+                            .placeholder(Placeholder.of("{maxed_collection_count}", AuroraAPI.formatNumber(maxedCollections)))
+                            .placeholder(Placeholder.of("{total_collection_count}", AuroraAPI.formatNumber(collectionsInCategory.size())))
+                            .placeholder(Placeholder.of("{maxed_progress_percent}", AuroraAPI.formatNumber(maxedPercent * 100)))
                             .placeholder(placeholders)
                             .build(player),
                     (e) -> {

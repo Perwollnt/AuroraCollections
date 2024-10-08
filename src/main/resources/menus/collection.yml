@@ -109,3 +109,5 @@ custom-items:
     slot: 53
     on-left-click:
     - "[close]"
+
+config-version: 1

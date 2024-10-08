@@ -87,6 +87,10 @@ public class Collection {
         AuroraAPI.getLeaderboards().updateUser(user, category + "_" + id);
     }
 
+    public boolean isMaxed(Player player) {
+        return getPlayerLevel(player) >= getMaxLevel();
+    }
+
     public void removeProgress(Player player, int amount) {
         var user = AuroraAPI.getUserManager().getUser(player);
         if (!user.isLoaded()) return;

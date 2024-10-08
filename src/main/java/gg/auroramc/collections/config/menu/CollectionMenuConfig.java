@@ -61,8 +61,8 @@ public class CollectionMenuConfig extends AuroraConfig {
     @Getter
     public static final class ProgressBar {
         private Integer length = 20;
-        private String filledCharacter;
-        private String unfilledCharacter;
+        private String filledCharacter = "";
+        private String unfilledCharacter = "";
     }
 
     public static File getFile(AuroraCollections plugin) {
