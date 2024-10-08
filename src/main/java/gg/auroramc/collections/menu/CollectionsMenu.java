@@ -56,13 +56,35 @@ public class CollectionsMenu {
             new CategoryMenu(player, plugin).open();
         });
 
-        var currentPercentage = AuroraAPI.formatNumber(plugin.getCollectionManager().getCategoryCompletionPercent(category, player) * 100);
+        var currentPercentage = plugin.getCollectionManager().getCategoryCompletionPercent(category, player);
 
+        // Category icon
         if (plugin.getConfigManager().getCollectionListMenuConfig().getCategoryIcon().getEnabled()) {
             var itemConfig = plugin.getConfigManager().getCategoriesMenuConfig().getItems().get(category).merge(plugin.getConfigManager().getCollectionListMenuConfig().getCategoryIcon().getItem());
+
+            var collectionsInCategory = plugin.getCollectionManager().getCollectionsByCategory(category);
+            var maxedCollections = collectionsInCategory.stream().filter(c -> c.isMaxed(player)).count();
+            var maxedPercent = Math.min((double) maxedCollections / collectionsInCategory.size(), 1);
+
+            var bar = plugin.getConfigManager().getCategoriesMenuConfig().getProgressBar();
+            var pcs = bar.getLength();
+
+            var completedPercent = Math.min(currentPercentage, 1);
+            var completedPcs = ((Double) Math.floor(pcs * completedPercent)).intValue();
+            var remainingPcs = pcs - completedPcs;
+
+            var maxedCompletedPercent = Math.min(maxedPercent, 1);
+            var maxedCompletedPcs = ((Double) Math.floor(pcs * maxedCompletedPercent)).intValue();
+            var maxedRemainingPcs = pcs - maxedCompletedPcs;
+
             menu.addItem(ItemBuilder.of(itemConfig)
                     .placeholder(Placeholder.of("{name}", categories.get(category).getName()))
-                    .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
+                    .placeholder(Placeholder.of("{progress_percent}", AuroraAPI.formatNumber(currentPercentage * 100)))
+                    .placeholder(Placeholder.of("{progressbar}", bar.getFilledCharacter().repeat(completedPcs) + bar.getUnfilledCharacter().repeat(remainingPcs) + "&r"))
+                    .placeholder(Placeholder.of("{maxed_progressbar}", bar.getFilledCharacter().repeat(maxedCompletedPcs) + bar.getUnfilledCharacter().repeat(maxedRemainingPcs) + "&r"))
+                    .placeholder(Placeholder.of("{maxed_collection_count}", AuroraAPI.formatNumber(maxedCollections)))
+                    .placeholder(Placeholder.of("{total_collection_count}", AuroraAPI.formatNumber(collectionsInCategory.size())))
+                    .placeholder(Placeholder.of("{maxed_progress_percent}", AuroraAPI.formatNumber(maxedPercent * 100)))
                     .build(player));
         }
 
