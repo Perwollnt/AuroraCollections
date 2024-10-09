@@ -1,5 +1,6 @@
 package gg.auroramc.collections.collection;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.events.user.AuroraUserLoadedEvent;
@@ -24,10 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class CollectionManager implements Listener {
@@ -227,5 +225,65 @@ public class CollectionManager implements Listener {
         }
 
         RewardExecutor.execute(rewards, player, level, placeholders);
+    }
+
+    public List<Placeholder<?>> getCategoryPlaceholders(String category, Player player) {
+        List<Placeholder<?>> placeholders = new ArrayList<>(13);
+
+        var categoryName = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category).getName();
+        var percentRaw = this.getCategoryCompletionPercent(category, player);
+        var currentPercentage = AuroraAPI.formatNumber(percentRaw * 100);
+
+        var boardName = "cc_" + category;
+        var lb = AuroraAPI.getUser(player.getUniqueId()).getLeaderboardEntries().get(boardName);
+        var lbm = AuroraAPI.getLeaderboards();
+
+        if (lb != null && lb.getPosition() != 0) {
+            placeholders.add(Placeholder.of("{lb_position}", AuroraAPI.formatNumber(lb.getPosition())));
+            placeholders.add(Placeholder.of("{lb_position_percent}", AuroraAPI.formatNumber(
+                    Math.min(((double) lb.getPosition() / Math.max(1, AuroraAPI.getLeaderboards().getBoardSize(boardName))) * 100, 100)
+            )));
+            placeholders.add(Placeholder.of("{lb_size}",
+                    AuroraAPI.formatNumber(
+                            Math.max(Math.max(lb.getPosition(), Bukkit.getOnlinePlayers().size()), AuroraAPI.getLeaderboards().getBoardSize(boardName)))));
+        } else {
+            placeholders.add(Placeholder.of("{lb_position}", lbm.getEmptyPlaceholder()));
+            placeholders.add(Placeholder.of("{lb_position_percent}", lbm.getEmptyPlaceholder()));
+            placeholders.add(Placeholder.of("{lb_size}",
+                    AuroraAPI.formatNumber(Math.max(Bukkit.getOnlinePlayers().size(), AuroraAPI.getLeaderboards().getBoardSize(boardName)))));
+        }
+
+        var totalCollected = this.getCollectionsByCategory(category).stream()
+                .mapToLong(collection -> collection.getCount(player)).sum();
+
+        placeholders.add(Placeholder.of("{total_formatted}", AuroraAPI.formatNumber(totalCollected)));
+        placeholders.add(Placeholder.of("{total}", totalCollected));
+        placeholders.add(Placeholder.of("{total_short}", AuroraAPI.formatNumberShort(totalCollected)));
+
+        var collectionsInCategory = plugin.getCollectionManager().getCollectionsByCategory(category);
+        var maxedCollections = collectionsInCategory.stream().filter(c -> c.isMaxed(player)).count();
+        var maxedPercent = Math.min((double) maxedCollections / collectionsInCategory.size(), 1);
+
+        var config = plugin.getConfigManager().getCategoriesMenuConfig();
+        var bar = config.getProgressBar();
+        var pcs = bar.getLength();
+
+        var completedPercent = Math.min(percentRaw, 1);
+        var completedPcs = ((Double) Math.floor(pcs * completedPercent)).intValue();
+        var remainingPcs = pcs - completedPcs;
+
+        var maxedCompletedPercent = Math.min(maxedPercent, 1);
+        var maxedCompletedPcs = ((Double) Math.floor(pcs * maxedCompletedPercent)).intValue();
+        var maxedRemainingPcs = pcs - maxedCompletedPcs;
+
+        placeholders.add(Placeholder.of("{name}", categoryName));
+        placeholders.add(Placeholder.of("{progress_percent}", currentPercentage));
+        placeholders.add(Placeholder.of("{progressbar}", bar.getFilledCharacter().repeat(completedPcs) + bar.getUnfilledCharacter().repeat(remainingPcs) + "&r"));
+        placeholders.add(Placeholder.of("{maxed_progressbar}", bar.getFilledCharacter().repeat(maxedCompletedPcs) + bar.getUnfilledCharacter().repeat(maxedRemainingPcs) + "&r"));
+        placeholders.add(Placeholder.of("{maxed_collection_count}", AuroraAPI.formatNumber(maxedCollections)));
+        placeholders.add(Placeholder.of("{total_collection_count}", AuroraAPI.formatNumber(collectionsInCategory.size())));
+        placeholders.add(Placeholder.of("{maxed_progress_percent}", AuroraAPI.formatNumber(maxedPercent * 100)));
+
+        return placeholders;
     }
 }

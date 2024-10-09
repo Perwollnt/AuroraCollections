@@ -1,19 +1,12 @@
 package gg.auroramc.collections.menu;
 
-import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.aurora.api.menu.ItemBuilder;
-import gg.auroramc.aurora.api.message.Placeholder;
 import gg.auroramc.aurora.api.util.NamespacedId;
 import gg.auroramc.collections.AuroraCollections;
-import gg.auroramc.collections.collection.Collection;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CategoryMenu {
     @Getter
@@ -48,63 +41,9 @@ public class CategoryMenu {
 
         for (var item : config.getItems().entrySet()) {
             var category = item.getKey();
-            var categoryName = plugin.getConfigManager().getCategoriesConfig().getCategories().get(category).getName();
-            var percentRaw = plugin.getCollectionManager().getCategoryCompletionPercent(category, player);
-            var currentPercentage = AuroraAPI.formatNumber(percentRaw * 100);
+            var placeholders = plugin.getCollectionManager().getCategoryPlaceholders(category, player);
 
-            List<Placeholder<?>> placeholders = new ArrayList<>();
-
-            var boardName = "cc_" + category;
-            var lb = AuroraAPI.getUser(player.getUniqueId()).getLeaderboardEntries().get(boardName);
-            var lbm = AuroraAPI.getLeaderboards();
-
-            if (lb != null && lb.getPosition() != 0) {
-                placeholders.add(Placeholder.of("{lb_position}", AuroraAPI.formatNumber(lb.getPosition())));
-                placeholders.add(Placeholder.of("{lb_position_percent}", AuroraAPI.formatNumber(
-                        Math.min(((double) lb.getPosition() / Math.max(1, AuroraAPI.getLeaderboards().getBoardSize(boardName))) * 100, 100)
-                )));
-                placeholders.add(Placeholder.of("{lb_size}",
-                        AuroraAPI.formatNumber(
-                                Math.max(Math.max(lb.getPosition(), Bukkit.getOnlinePlayers().size()), AuroraAPI.getLeaderboards().getBoardSize(boardName)))));
-            } else {
-                placeholders.add(Placeholder.of("{lb_position}", lbm.getEmptyPlaceholder()));
-                placeholders.add(Placeholder.of("{lb_position_percent}", lbm.getEmptyPlaceholder()));
-                placeholders.add(Placeholder.of("{lb_size}",
-                        AuroraAPI.formatNumber(Math.max(Bukkit.getOnlinePlayers().size(), AuroraAPI.getLeaderboards().getBoardSize(boardName)))));
-            }
-
-            var totalCollected = plugin.getCollectionManager().getCollectionsByCategory(category).stream()
-                    .mapToLong(collection -> collection.getCount(player)).sum();
-
-            placeholders.add(Placeholder.of("{total_formatted}", AuroraAPI.formatNumber(totalCollected)));
-            placeholders.add(Placeholder.of("{total}", totalCollected));
-            placeholders.add(Placeholder.of("{total_short}", AuroraAPI.formatNumberShort(totalCollected)));
-
-            var collectionsInCategory = plugin.getCollectionManager().getCollectionsByCategory(category);
-            var maxedCollections = collectionsInCategory.stream().filter(c -> c.isMaxed(player)).count();
-            var maxedPercent = Math.min((double) maxedCollections / collectionsInCategory.size(), 1);
-
-            var bar = config.getProgressBar();
-            var pcs = bar.getLength();
-
-            var completedPercent = Math.min(percentRaw, 1);
-            var completedPcs = ((Double) Math.floor(pcs * completedPercent)).intValue();
-            var remainingPcs = pcs - completedPcs;
-
-            var maxedCompletedPercent = Math.min(maxedPercent, 1);
-            var maxedCompletedPcs = ((Double) Math.floor(pcs * maxedCompletedPercent)).intValue();
-            var maxedRemainingPcs = pcs - maxedCompletedPcs;
-
-            menu.addItem(ItemBuilder.of(item.getValue())
-                            .placeholder(Placeholder.of("{name}", categoryName))
-                            .placeholder(Placeholder.of("{progress_percent}", currentPercentage))
-                            .placeholder(Placeholder.of("{progressbar}", bar.getFilledCharacter().repeat(completedPcs) + bar.getUnfilledCharacter().repeat(remainingPcs) + "&r"))
-                            .placeholder(Placeholder.of("{maxed_progressbar}", bar.getFilledCharacter().repeat(maxedCompletedPcs) + bar.getUnfilledCharacter().repeat(maxedRemainingPcs) + "&r"))
-                            .placeholder(Placeholder.of("{maxed_collection_count}", AuroraAPI.formatNumber(maxedCollections)))
-                            .placeholder(Placeholder.of("{total_collection_count}", AuroraAPI.formatNumber(collectionsInCategory.size())))
-                            .placeholder(Placeholder.of("{maxed_progress_percent}", AuroraAPI.formatNumber(maxedPercent * 100)))
-                            .placeholder(placeholders)
-                            .build(player),
+            menu.addItem(ItemBuilder.of(item.getValue()).placeholder(placeholders).build(player),
                     (e) -> {
                         if (e.isRightClick() && plugin.getCollectionManager().getCategory(category).isLevelingEnabled()) {
                             new CategoryRewardsMenu(player, plugin, category).open();
