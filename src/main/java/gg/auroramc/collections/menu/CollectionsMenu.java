@@ -1,6 +1,5 @@
 package gg.auroramc.collections.menu;
 
-import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.menu.AuroraMenu;
 import gg.auroramc.aurora.api.menu.ItemBuilder;
 import gg.auroramc.aurora.api.message.Placeholder;
@@ -56,7 +55,6 @@ public class CollectionsMenu {
             new CategoryMenu(player, plugin).open();
         });
 
-        var currentPercentage = plugin.getCollectionManager().getCategoryCompletionPercent(category, player);
 
         // Category icon
         if (plugin.getConfigManager().getCollectionListMenuConfig().getCategoryIcon().getEnabled()) {
@@ -81,6 +79,12 @@ public class CollectionsMenu {
             var template = cConfig.getCollectionMenuTemplate();
 
             var itemConfig = template.getEnabled() ? template.getItem().merge(collection.getConfig().getMenuItem()) : collection.getConfig().getMenuItem();
+
+            if (config.getSecretCollectionDisplay().getEnabled()) {
+                if (collection.getCount(player) == 0) {
+                    itemConfig = config.getSecretCollectionDisplay().getItem();
+                }
+            }
 
             var builder = ItemBuilder.of(itemConfig).slot(slot)
                     .placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1));

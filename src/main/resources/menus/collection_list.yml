@@ -17,6 +17,15 @@ display-area: [
   37, 38, 39, 40, 41, 42, 43
 ]
 
+secret-collection-display:
+  enabled: false
+  item:
+    name: "&c???"
+    material: gray_dye
+    lore:
+    - "&7You have not unlocked this"
+    - "&7collection yet"
+
 items:
   filler:
     enabled: true
