@@ -80,18 +80,24 @@ public class CollectionsMenu {
 
             var itemConfig = template.getEnabled() ? template.getItem().merge(collection.getConfig().getMenuItem()) : collection.getConfig().getMenuItem();
 
+            boolean hidden = false;
             if (config.getSecretCollectionDisplay().getEnabled()) {
                 if (collection.getCount(player) == 0) {
                     itemConfig = config.getSecretCollectionDisplay().getItem();
+                    hidden = true;
                 }
             }
 
             var builder = ItemBuilder.of(itemConfig).slot(slot)
                     .placeholder(collection.getPlaceholders(player, collection.getPlayerLevel(player) + 1));
 
-            menu.addItem(builder.build(player), (e) -> {
-                new ProgressionMenu(player, plugin, collection).open();
-            });
+            if (hidden) {
+                menu.addItem(builder.build(player));
+            } else {
+                menu.addItem(builder.build(player), (e) -> {
+                    new ProgressionMenu(player, plugin, collection).open();
+                });
+            }
         }
 
         var pageCount = getTotalPageCount(config.getDisplayArea().size());
