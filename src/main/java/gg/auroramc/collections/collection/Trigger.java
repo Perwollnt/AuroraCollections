@@ -10,4 +10,5 @@ public final class Trigger {
     public static final String BLOCK_SHEAR_LOOT = "BLOCK_SHEAR_LOOT";
     public static final String FISH = "FISH";
     public static final String MINION_LOOT = "MINION_LOOT";
+    public static final String ENTITY_DAMAGE = "ENTITY_DAMAGE";
 }

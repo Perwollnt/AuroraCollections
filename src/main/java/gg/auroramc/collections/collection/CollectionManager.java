@@ -53,6 +53,7 @@ public class CollectionManager implements Listener {
         Bukkit.getPluginManager().registerEvents(new HarvestingListener(plugin), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerKillListener(plugin), plugin);
         Bukkit.getPluginManager().registerEvents(new ShearListener(plugin), plugin);
+        Bukkit.getPluginManager().registerEvents(new DamageListener(plugin), plugin);
     }
 
     public java.util.Collection<Category> getCategories() {
