@@ -27,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Getter
 public class Collection {
@@ -116,12 +118,31 @@ public class Collection {
             data.getCache().computeIfAbsent(category, k -> Maps.newConcurrentMap()).put(id, (long) amount);
             data.setDirty();
         } else {
-            progress(player, null, ((Long) (amount - current)).intValue());
+            progress(player, null, ((Long) (amount - current)).intValue(), null);
         }
         AuroraAPI.getLeaderboards().updateUser(user, category + "_" + id);
     }
 
-    public synchronized void progress(Player player, @Nullable TypeId type, int amount) {
+    private int getMultiplier(TypeId typeId, String trigger) {
+        int multiplier = 1;
+
+        if (trigger == null) {
+            return multiplier;
+        }
+
+        var entry = config.getParsedMultipliers().stream()
+                .filter(m -> m.getTypes().contains(typeId))
+                .filter(m -> m.getTriggers().contains(trigger))
+                .findFirst();
+
+        if (entry.isPresent()) {
+            multiplier = entry.get().getValue();
+        }
+
+        return multiplier;
+    }
+
+    public synchronized void progress(Player player, @Nullable TypeId type, int amount, String trigger) {
         if (type != null && !config.getParsedTypes().contains(type)) {
             return;
         }
@@ -130,7 +151,10 @@ public class Collection {
 
         var oldLevel = getPlayerLevel(player);
         var data = AuroraAPI.getUserManager().getUser(player).getData(CollectionData.class);
-        data.incrementCollectionCount(category, id, amount);
+
+        var actualAmount = amount * getMultiplier(type, trigger);
+        data.incrementCollectionCount(category, id, actualAmount);
+
         var newLevel = getPlayerLevel(player);
 
         if (newLevel <= oldLevel) {
@@ -269,7 +293,7 @@ public class Collection {
     }
 
     public void progress(Player player, TypeId type) {
-        progress(player, type, 1);
+        progress(player, type, 1, null);
     }
 
     public Long getCount(Player player) {

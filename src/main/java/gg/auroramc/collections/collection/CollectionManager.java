@@ -117,8 +117,13 @@ public class CollectionManager implements Listener {
 
             for (var category : categories.values()) {
                 for (var collection : category.values()) {
-                    if (Arrays.stream(triggers).anyMatch(trigger -> collection.getConfig().getParsedTriggers().contains(trigger))) {
-                        collection.progress(player, type, amount);
+                    String firstMatch = Arrays.stream(triggers)
+                            .filter(trigger -> collection.getConfig().getParsedTriggers().contains(trigger))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (firstMatch != null) {
+                        collection.progress(player, type, amount, firstMatch);
                         toUpdate.add(collection.getCategory() + "_" + collection.getId());
                         toUpdate.add("cc_" + collection.getCategory());
                     }

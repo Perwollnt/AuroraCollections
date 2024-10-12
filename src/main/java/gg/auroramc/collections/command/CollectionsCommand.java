@@ -86,7 +86,7 @@ public class CollectionsCommand extends BaseCommand {
         if (collections == null) return;
 
         for (var collection : collections) {
-            collection.progress(target, null, number);
+            collection.progress(target, null, number, null);
         }
 
         if (!silent) {

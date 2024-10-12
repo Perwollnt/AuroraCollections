@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +28,7 @@ public class CollectionConfig extends AuroraConfig {
     private Map<String, ConcreteMatcherConfig> customLevels;
     private ItemConfig menuItem;
     private Map<String, ItemConfig> customMenuItems;
+    private List<Multiplier> multipliers = new ArrayList<>();
 
     @IgnoreField
     private Set<TypeId> parsedTypes;
@@ -34,9 +36,32 @@ public class CollectionConfig extends AuroraConfig {
     @IgnoreField
     private Set<String> parsedTriggers;
 
+    @IgnoreField
+    private List<ParsedMultiplier> parsedMultipliers;
+
     @Getter
     public static final class CustomLevel {
         private ConfigurationSection rewards;
+    }
+
+    @Getter
+    public static final class Multiplier {
+        private List<String> triggers = new ArrayList<>();
+        private List<String> types = new ArrayList<>();
+        private Integer value = 1;
+    }
+
+    @Getter
+    public static final class ParsedMultiplier {
+        private final Set<String> triggers;
+        private final Set<TypeId> types;
+        private final Integer value;
+
+        public ParsedMultiplier(Multiplier multiplier) {
+            this.triggers = multiplier.getTriggers().stream().map(String::toUpperCase).collect(Collectors.toSet());
+            this.types = multiplier.getTypes().stream().map(TypeId::fromDefault).collect(Collectors.toSet());
+            this.value = multiplier.getValue();
+        }
     }
 
     public CollectionConfig(File file) {
@@ -48,5 +73,6 @@ public class CollectionConfig extends AuroraConfig {
         super.load();
         parsedTypes = types.stream().map(TypeId::fromDefault).collect(Collectors.toSet());
         parsedTriggers = triggers.stream().map(String::toUpperCase).collect(Collectors.toSet());
+        parsedMultipliers = multipliers.stream().map(ParsedMultiplier::new).toList();
     }
 }
