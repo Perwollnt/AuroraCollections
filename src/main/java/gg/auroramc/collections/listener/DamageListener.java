@@ -3,6 +3,7 @@ package gg.auroramc.collections.listener;
 import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,14 @@ public class DamageListener implements Listener {
         if (victim instanceof Player) return;
 
         var damage = event.getFinalDamage();
+
+        // cap the damage to the victim's max health
+        if(victim instanceof LivingEntity livingEntity) {
+            if(damage > livingEntity.getHealth()) {
+                damage = livingEntity.getHealth();
+            }
+        }
+
         var id = AuroraAPI.getEntityManager().resolveId(victim);
 
         plugin.getCollectionManager().progressCollections(damager, id, (int) Math.floor(damage), Trigger.ENTITY_DAMAGE);
