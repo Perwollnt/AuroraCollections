@@ -31,8 +31,8 @@ public class DamageListener implements Listener {
         var damage = event.getFinalDamage();
 
         // cap the damage to the victim's max health
-        if(victim instanceof LivingEntity livingEntity) {
-            if(damage > livingEntity.getHealth()) {
+        if (victim instanceof LivingEntity livingEntity) {
+            if (damage > livingEntity.getHealth()) {
                 damage = livingEntity.getHealth();
             }
         }
