@@ -14,12 +14,12 @@ menu-item:
 # To reach level 1, you need 50
 # To reach level 2, you need 100 and so on
 requirements:
-  - 50
-  - 100
-  - 250
-  - 1000
-  - 2500
+  - 80
+  - 200
+  - 500
+  - 2000
   - 5000
   - 10000
+  - 25000
 
 use-global-level-matchers: true

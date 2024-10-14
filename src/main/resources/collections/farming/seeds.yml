@@ -1,4 +1,4 @@
-triggers: [ harvest ]
+triggers: [ harvest, block_loot ]
 types:
   - "minecraft:wheat_seeds"
 
@@ -11,12 +11,19 @@ menu-item:
 # To reach level 1, you need 50
 # To reach level 2, you need 100 and so on
 requirements:
-  - 50
-  - 100
-  - 250
-  - 1000
-  - 2500
+  - 300
+  - 800
+  - 1600
+  - 3000
   - 5000
+  - 8000
   - 10000
+  - 15000
+  - 20000
+  - 28000
+  - 35000
+  - 40000
+  - 50000
+  - 60000
 
 use-global-level-matchers: true
