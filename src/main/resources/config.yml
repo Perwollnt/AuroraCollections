@@ -62,7 +62,7 @@ global-level-matchers:
     rewards:
       my-money-reward:
         type: money
-        formula: "1000 * {level_raw}^2 - 1000 * {level_raw} + 2000"
+        formula: "1000 * {level_raw} * 2.5"
         display: "&8+&a{value_formatted}$"
       my-xp-reward:
         type: levels_xp
