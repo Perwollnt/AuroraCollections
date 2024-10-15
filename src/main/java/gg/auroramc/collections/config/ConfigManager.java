@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
@@ -89,26 +90,47 @@ public class ConfigManager {
         }
 
         for (var dir : collectionsDir.toFile().listFiles()) {
-            if(!dir.isDirectory()) {
+            if (!dir.isDirectory()) {
                 AuroraCollections.logger().warning("File " + dir.getName() + " is in the collections directory, but should be in a category subdirectory");
-            } else if(!categoriesConfig.getCategories().keySet().contains(dir.getName())) {
+            } else if (!categoriesConfig.getCategories().keySet().contains(dir.getName())) {
                 AuroraCollections.logger().warning("Category " + dir.getName() + " does not exist in categories.yml");
             }
         }
+
+        var validIdPattern = Pattern.compile("^[a-zA-Z0-9_-]+$");
 
         for (var dir : categoriesConfig.getCategories().keySet()) {
             Path categoryDir = collectionsDir.resolve(dir);
             if (!Files.exists(categoryDir)) {
                 continue;
             }
+
+            if (!validIdPattern.matcher(dir).matches()) {
+                AuroraCollections.logger().severe("Category ID: '" + dir + "' doesn't match the required format ^[a-zA-Z0-9_-]+$. " +
+                        "Use only english alphabet, numbers, underscores and hyphens. " +
+                        "Category will be loaded, but you may experience issues.");
+            }
+
             try (Stream<Path> paths = Files.list(categoryDir)) {
                 paths.filter(Files::isRegularFile)
                         .filter(path -> path.toString().endsWith(".yml"))
                         .forEach(path -> {
+                            var fileName = path.getFileName().toString().replace(".yml", "");
+
+                            if (fileName.contains(".")) {
+                                AuroraCollections.logger().severe("ID: '" + fileName + "' contains a dot/period (.), which is not allowed. Skipping.");
+                                return;
+                            }
+
+                            if (!validIdPattern.matcher(fileName).matches()) {
+                                AuroraCollections.logger().warning("ID: '" + fileName + "' doesn't match the required format ^[a-zA-Z0-9_-]+$. " +
+                                        "Use only english alphabet, numbers, underscores and hyphens. " +
+                                        "Collection will be loaded, but you may experience issues.");
+                            }
+
                             CollectionConfig collectionConfig = new CollectionConfig(path.toFile());
                             collectionConfig.load();
-                            collections.computeIfAbsent(dir, k -> Maps.newConcurrentMap())
-                                    .computeIfAbsent(path.getFileName().toString().replace(".yml", ""), k -> collectionConfig);
+                            collections.computeIfAbsent(dir, k -> Maps.newConcurrentMap()).computeIfAbsent(fileName, k -> collectionConfig);
                         });
             } catch (IOException e) {
                 AuroraCollections.logger().warning("Failed to load collections for category: " + dir + " error: " + e.getMessage());
