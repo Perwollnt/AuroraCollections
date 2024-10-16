@@ -14,6 +14,8 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.CompletableFuture;
+
 public final class AuroraCollections extends JavaPlugin {
 
     @Getter
@@ -89,7 +91,10 @@ public final class AuroraCollections extends JavaPlugin {
         commandManager.reload();
         collectionManager.reloadCollections();
 
-        Bukkit.getOnlinePlayers().forEach(player -> collectionManager.getRewardAutoCorrector().correctRewards(player));
+        CompletableFuture.runAsync(() ->
+                Bukkit.getOnlinePlayers().forEach(player ->
+                        collectionManager.getRewardAutoCorrector().correctRewards(player)));
+
     }
 
     @Override

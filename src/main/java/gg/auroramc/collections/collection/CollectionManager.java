@@ -176,7 +176,7 @@ public class CollectionManager implements Listener {
 
     @EventHandler
     public void onUserLoaded(AuroraUserLoadedEvent e) {
-        rewardAutoCorrector.correctRewards(e.getUser().getPlayer());
+        CompletableFuture.runAsync(() -> rewardAutoCorrector.correctRewards(e.getUser().getPlayer()));
     }
 
     @EventHandler

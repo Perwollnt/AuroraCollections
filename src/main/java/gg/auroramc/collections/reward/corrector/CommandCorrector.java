@@ -19,40 +19,39 @@ public class CommandCorrector implements RewardCorrector {
         this.plugin = plugin;
     }
 
-    private record CommandPair(CommandReward reward, List<Placeholder<?>> placeholders) {}
+    private record CommandPair(CommandReward reward, List<Placeholder<?>> placeholders) {
+    }
 
     @Override
     public void correctRewards(Player player) {
-        CompletableFuture.runAsync(() -> {
-            var manager = plugin.getCollectionManager();
-            final var rewards = new HashMap<Integer, CommandPair>();
+        var manager = plugin.getCollectionManager();
+        final var rewards = new HashMap<Integer, CommandPair>();
 
-            for(var collection : manager.getAllCollections()) {
-                var level = collection.getPlayerLevel(player);
+        for (var collection : manager.getAllCollections()) {
+            var level = collection.getPlayerLevel(player);
 
-                for (int i = 1; i < level + 1; i++) {
-                    var matcher = collection.getLevelMatcher().getBestMatcher(i);
-                    if (matcher == null) continue;
+            for (int i = 1; i < level + 1; i++) {
+                var matcher = collection.getLevelMatcher().getBestMatcher(i);
+                if (matcher == null) continue;
 
-                    for (var reward : matcher.computeRewards(i)) {
-                        if (reward instanceof CommandReward commandReward) {
-                            if (commandReward.shouldBeCorrected(player, i)) {
-                                rewards.put(i, new CommandPair(commandReward, collection.getPlaceholders(player, i)));
-                            }
+                for (var reward : matcher.computeRewards(i)) {
+                    if (reward instanceof CommandReward commandReward) {
+                        if (commandReward.shouldBeCorrected(player, i)) {
+                            rewards.put(i, new CommandPair(commandReward, collection.getPlaceholders(player, i)));
                         }
                     }
                 }
             }
+        }
 
-            if (rewards.isEmpty()) return;
+        if (rewards.isEmpty()) return;
 
-            Bukkit.getGlobalRegionScheduler().run(plugin, (task) -> {
-                rewards.forEach((lvl, reward) -> {
-                    if (!player.isOnline()) return;
-                    reward.reward().execute(player, lvl, reward.placeholders());
-                });
-                AuroraCollections.logger().debug("Corrected %d command rewards for player %s".formatted(rewards.size(), player.getName()));
+        Bukkit.getGlobalRegionScheduler().run(plugin, (task) -> {
+            rewards.forEach((lvl, reward) -> {
+                if (!player.isOnline()) return;
+                reward.reward().execute(player, lvl, reward.placeholders());
             });
+            AuroraCollections.logger().debug("Corrected %d command rewards for player %s".formatted(rewards.size(), player.getName()));
         });
     }
 }
