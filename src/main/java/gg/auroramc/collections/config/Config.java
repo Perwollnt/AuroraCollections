@@ -110,9 +110,9 @@ public class Config extends AuroraConfig {
                     yaml.set("discover-message.open-menu-when-clicked", true);
                     yaml.set("discover-message.message", List.of(
                             "&3&m----------------------------------------&r",
-                            ' ',
+                            " ",
                             "  &f&l{collection_name} collection discovered&r",
-                            ' ',
+                            " ",
                             "&3&m----------------------------------------"
                     ));
 
