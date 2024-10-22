@@ -1,4 +1,4 @@
-config-version: 1
+config-version: 2
 
 title: "{category} collections"
 
@@ -18,13 +18,14 @@ display-area: [
 ]
 
 secret-collection-display:
-  enabled: false
+  enabled: true
   item:
-    name: "&c???"
+    name: "&c{collection_name}"
     material: gray_dye
     lore:
     - "&7You have not unlocked this"
-    - "&7collection yet"
+    - "&7collection yet. Collect at least 1"
+    - "&7item to unlock it!"
 
 items:
   filler:

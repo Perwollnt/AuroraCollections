@@ -74,7 +74,7 @@ public class CollectionListMenuConfig extends AuroraConfig {
                     yaml.set("config-version", null);
                     yaml.set("secret-collection-display.enabled", false);
                     yaml.set("secret-collection-display.item.material", "gray_dye");
-                    yaml.set("secret-collection-display.item.name", "&c???");
+                    yaml.set("secret-collection-display.item.name", "&c{collection_name}");
                     yaml.set("secret-collection-display.item.lore", List.of("&7You haven't discovered this", "&7Collection yet!"));
                     yaml.set("config-version", 2);
                 }
