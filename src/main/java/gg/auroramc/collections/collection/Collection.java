@@ -213,8 +213,8 @@ public class Collection {
         var rawName = Placeholder.of("{collection_name_raw}", PlainTextComponentSerializer.plainText().serialize(Text.component(this.config.getName())));
 
         for (int i = oldLevel + 1; i <= newLevel; i++) {
-            var matcher = levelMatcher.getBestMatcher(newLevel);
-            var placeholders = getPlaceholders(player, oldLevel, newLevel);
+            var matcher = levelMatcher.getBestMatcher(i);
+            var placeholders = getPlaceholders(player, i - 1, i);
             placeholders.add(rawName);
 
             var text = Component.text();
@@ -258,7 +258,7 @@ public class Collection {
                 Chat.sendMessage(player, text.build());
             }
 
-            RewardExecutor.execute(rewards, player, newLevel, placeholders);
+            RewardExecutor.execute(rewards, player, i, placeholders);
             Bukkit.getPluginManager().callEvent(new CollectionLevelUpEvent(player, this, i));
         }
     }
