@@ -11,6 +11,7 @@ import gg.auroramc.collections.config.ConfigManager;
 import gg.auroramc.collections.hooks.HookManager;
 import gg.auroramc.collections.placeholder.CollectionsPlaceholderHandler;
 import lombok.Getter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -84,6 +85,8 @@ public final class AuroraCollections extends JavaPlugin {
         } catch (IllegalAccessException | NoSuchFieldException e) {
             l.severe("Failed to initialize api provider! error: " + e.getMessage());
         }
+
+        new Metrics(this, 23778);
     }
 
     public void reload() {
