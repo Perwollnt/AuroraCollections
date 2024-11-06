@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
     compileOnly("gg.auroramc:Aurora:1.6.0")
     compileOnly("gg.auroramc:AuroraLevels:1.5.1")
     compileOnly("net.luckperms:api:5.4")
@@ -53,6 +53,7 @@ dependencies {
     compileOnly("org.me.leo_s:BeeMinions:2.0.9-BETA")
 
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -66,8 +67,9 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.withType<ShadowJar> {
     archiveFileName.set("AuroraCollections-${project.version}.jar")
 
-    relocate("co.aikar.commands", "gg.auroramc.levels.libs.acf")
-    relocate("co.aikar.locales", "gg.auroramc.levels.libs.locales")
+    relocate("co.aikar.commands", "gg.auroramc.collections.libs.acf")
+    relocate("co.aikar.locales", "gg.auroramc.collections.libs.locales")
+    relocate("org.bstats", "gg.auroramc.collections.libs.bstats")
 
     exclude("acf-*.properties")
 }
