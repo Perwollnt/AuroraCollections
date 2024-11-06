@@ -122,6 +122,14 @@ public class Config extends AuroraConfig {
                     yaml.set("discover-sound.pitch", 1);
 
                     yaml.set("config-version", 3);
+                },
+                (yaml) -> {
+                    yaml.set("config-version", null);
+
+                    yaml.set("level-up-sound.sound", "entity.player.levelup");
+                    yaml.set("discover-sound.sound", "entity.player.levelup");
+
+                    yaml.set("config-version", 4);
                 }
         );
     }
