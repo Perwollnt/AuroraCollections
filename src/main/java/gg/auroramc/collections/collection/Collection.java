@@ -78,7 +78,7 @@ public class Collection {
     }
 
     public long getRequiredAmount(long level) {
-        return config.getRequirements().size() < level ? config.getRequirements().getLast() : config.getRequirements().get((int) Math.max(level -1, 0));
+        return config.getRequirements().size() < level ? config.getRequirements().getLast() : config.getRequirements().get((int) Math.max(level - 1, 0));
     }
 
     public void resetProgress(Player player) {
@@ -192,6 +192,14 @@ public class Collection {
         }
     }
 
+    public int getMaxRequirement() {
+        var last = config.getRequirements().getLast();
+        if (last == null) {
+            return 0;
+        }
+        return last;
+    }
+
     public synchronized void progress(Player player, @Nullable TypeId type, int amount, String trigger) {
         if (type != null && !config.getParsedTypes().contains(type)) {
             return;
@@ -206,7 +214,13 @@ public class Collection {
         boolean displayDiscoverMessage = data.getCollectionCount(category, id) == 0;
 
         var actualAmount = amount * getMultiplier(type, trigger);
-        data.incrementCollectionCount(category, id, actualAmount);
+
+        if (plugin.getConfigManager().getConfig().getLimitProgressToMaxRequirement()) {
+            data.incrementCollectionCount(category, id, actualAmount, getMaxRequirement());
+        } else {
+            data.incrementCollectionCount(category, id, actualAmount);
+        }
+
 
         var newLevel = getPlayerLevel(player);
 

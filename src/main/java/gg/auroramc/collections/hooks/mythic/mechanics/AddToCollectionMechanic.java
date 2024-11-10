@@ -22,20 +22,20 @@ import org.bukkit.entity.Player;
 public class AddToCollectionMechanic implements ITargetedEntitySkill {
     private final AuroraCollections plugin;
     private final String category;
-    private final String collection;
+    private final String collectionId;
     private final PlaceholderInt amount;
 
     public AddToCollectionMechanic(AuroraCollections plugin, MythicMechanicLoadEvent loader) {
         this.plugin = plugin;
         this.amount = loader.getConfig().getPlaceholderInteger(new String[]{"amount", "a",}, 0);
         this.category = loader.getConfig().getString(new String[]{"category", "cat", "ca"});
-        this.collection = loader.getConfig().getString(new String[]{"collection", "col", "co"});
+        this.collectionId = loader.getConfig().getString(new String[]{"collection", "col", "co"});
 
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
 
-        if (collection == null) {
+        if (collectionId == null) {
             throw new IllegalArgumentException("Collection cannot be null");
         }
     }
@@ -50,8 +50,8 @@ public class AddToCollectionMechanic implements ITargetedEntitySkill {
 
         var data = user.getData(CollectionData.class);
 
-        data.getCache().computeIfAbsent(category, (k) -> Maps.newConcurrentMap())
-                .merge(collection, ((Integer) amount.get(skillMetadata)).longValue(), Long::sum);
+        var collection = plugin.getCollectionManager().getCollection(category, collectionId);
+        collection.progress(player, null, amount.get(skillMetadata), null);
 
         data.setDirty();
 

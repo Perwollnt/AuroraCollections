@@ -26,6 +26,7 @@ public class Config extends AuroraConfig {
     private Map<String, DisplayComponent> displayComponents;
     private LeaderboardConfig leaderboard;
     private Boolean preventCreativeMode = false;
+    private Boolean limitProgressToMaxRequirement = false;
 
     public Config(AuroraCollections plugin) {
         super(getFile(plugin));
@@ -130,6 +131,17 @@ public class Config extends AuroraConfig {
                     yaml.set("discover-sound.sound", "entity.player.levelup");
 
                     yaml.set("config-version", 4);
+                },
+                (yaml) -> {
+                    yaml.set("config-version", null);
+
+                    yaml.set("limit-progress-to-max-requirement", false);
+                    yaml.setComments("limit-progress-to-max-requirement", List.of(
+                            "Prevents players from progressing in collections if they are already at max level",
+                            "This is not recommended unless you are not finished with your level (beta testing server etc.)"
+                    ));
+
+                    yaml.set("config-version", 5);
                 }
         );
     }

@@ -5,6 +5,10 @@ language: en
 # Prevents players from progressing in collections if they are in creative mode
 prevent-creative-mode: true
 
+# Prevents players from progressing in collections if they are already at max level
+# This is not recommended unless you are not finished with your level (beta testing server etc.)
+limit-progress-to-max-requirement: false
+
 # Changing leaderboard options requires a server restart
 leaderboard:
   # How many players to display on the leaderboard at all times.
@@ -87,4 +91,4 @@ global-level-matchers:
         display: "&8+&b{value_formatted} Global XP"
 
 # Don't touch this unless you know what you're doing
-config-version: 4
+config-version: 5
