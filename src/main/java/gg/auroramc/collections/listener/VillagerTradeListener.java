@@ -1,7 +1,5 @@
 package gg.auroramc.collections.listener;
 
-import gg.auroramc.aurora.api.AuroraAPI;
-import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.CollectionManager;
 import gg.auroramc.collections.collection.Trigger;
@@ -22,10 +20,9 @@ public class VillagerTradeListener implements Listener {
     public void onTrade(PlayerPurchaseEvent event) {
 
         Player player = event.getPlayer();
-        TypeId typeId = AuroraAPI.getItemManager().resolveId(event.getTrade().getResult());
-        int amount = event.getTrade().getResult().getAmount();
 
         CollectionManager manager = plugin.getCollectionManager();
-        manager.progressCollections(player, typeId, amount, Trigger.VILLAGER_TRADE);
+
+        manager.progressCollections(player, event.getTrade().getResult(), Trigger.VILLAGER_TRADE);
     }
 }

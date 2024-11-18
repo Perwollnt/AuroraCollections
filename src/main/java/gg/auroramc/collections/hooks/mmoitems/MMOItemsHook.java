@@ -1,16 +1,15 @@
 package gg.auroramc.collections.hooks.mmoitems;
 
 import gg.auroramc.aurora.api.AuroraAPI;
-import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
 import gg.auroramc.collections.hooks.Hook;
 import io.lumine.mythic.lib.api.item.NBTItem;
+import net.Indyuce.mmoitems.api.event.ItemDropEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import net.Indyuce.mmoitems.api.event.ItemDropEvent;
 
 public class MMOItemsHook implements Hook, Listener {
     private AuroraCollections plugin;
@@ -28,15 +27,15 @@ public class MMOItemsHook implements Hook, Listener {
         if (AuroraAPI.getRegionManager().isPlacedBlock(event.getMinedBlock())) return;
 
         for (var drop : event.getDrops()) {
-            TypeId typeId;
-            var nbtItem = NBTItem.get(drop);
-            if(nbtItem.hasType()) {
-                typeId = new TypeId("mmoitems", nbtItem.getType() + ":" + nbtItem.getString("MMOITEMS_ITEM_ID"));
-            } else {
-                typeId = TypeId.from(drop.getType());
-            }
+            //TypeId typeId;
+            NBTItem nbtItem = NBTItem.get(drop);
+            //if(nbtItem.hasType()) {
+            //    typeId = new TypeId("mmoitems", nbtItem.getType() + ":" + nbtItem.getString("MMOITEMS_ITEM_ID"));
+            //} else {
+            //    typeId = TypeId.from(drop.getType());
+            //}
 
-            plugin.getCollectionManager().progressCollections(player, typeId, drop.getAmount(), Trigger.BLOCK_LOOT);
+            plugin.getCollectionManager().progressCollections(player, nbtItem.getItem(), drop.getAmount(), Trigger.BLOCK_LOOT);
         }
     }
 }

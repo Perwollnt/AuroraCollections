@@ -44,8 +44,7 @@ public class Oraxen2Hook implements Hook, Listener {
     private void handleProgression(Player player, List<DroppedLoot> droppedLootList) {
         for (DroppedLoot droppedLoot : droppedLootList) {
             var itemStack = droppedLoot.loot().itemStack();
-            var typeId = plugin.getItemManager().resolveId(itemStack);
-            plugin.getCollectionManager().progressCollections(player, typeId, droppedLoot.amount(), Trigger.BLOCK_LOOT);
+            plugin.getCollectionManager().progressCollections(player, itemStack, droppedLoot.amount(), Trigger.BLOCK_LOOT);
         }
     }
 }

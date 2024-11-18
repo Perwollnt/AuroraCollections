@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.me.leo_s.beeminions.api.events.RemoveItemStorageMinion;
 
 public class BeeMinionsHook implements Hook, Listener {
@@ -25,9 +26,9 @@ public class BeeMinionsHook implements Hook, Listener {
         var player = Bukkit.getPlayer(event.getOwner());
         if (player == null) return;
 
-        var id = plugin.getItemManager().resolveId(event.getItemAffected());
         var amount = event.getItemAffected().getAmount();
 
-        plugin.getCollectionManager().progressCollections(player, id, amount, Trigger.MINION_LOOT);
+        ItemStack itemStack = event.getItemAffected();
+        plugin.getCollectionManager().progressCollections(player, itemStack, amount, Trigger.MINION_LOOT);
     }
 }

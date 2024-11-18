@@ -8,6 +8,7 @@ import net.momirealms.customfishing.api.mechanic.loot.LootType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 
 public class CustomFishingListener implements Listener {
@@ -23,11 +24,11 @@ public class CustomFishingListener implements Listener {
         var isVanilla = e.getLoot().id().equals("vanilla");
 
         if (e.getEntity() instanceof Item item) {
-            var itemId = isVanilla ? TypeId.from(item.getItemStack().getType()) : new TypeId("customfishing", e.getLoot().id());
-            int quantity = item.getItemStack().getAmount();
+            //var itemId = isVanilla ? TypeId.from(item.getItemStack().getType()) : new TypeId("customfishing", e.getLoot().id());
+            ItemStack itemStack = item.getItemStack();
 
             var manager = plugin.getCollectionManager();
-            manager.progressCollections(e.getPlayer(), itemId, quantity, Trigger.FISH);
+            manager.progressCollections(e.getPlayer(), itemStack, Trigger.FISH);
         } else {
             var itemId = new TypeId("customfishing", e.getLoot().id());
             var manager = plugin.getCollectionManager();

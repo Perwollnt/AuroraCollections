@@ -37,13 +37,13 @@ public class BlockBreakListener implements Listener {
 
         if (specialCrops.contains(type)) {
             for (var drop : e.getBlock().getDrops(player.getInventory().getItemInMainHand())) {
-                manager.progressCollections(player, TypeId.from(drop.getType()), drop.getAmount(), Trigger.HARVEST);
+                manager.progressCollections(player, drop, Trigger.HARVEST);
             }
             return;
         }
 
         for (var drop : e.getBlock().getDrops(player.getInventory().getItemInMainHand())) {
-            manager.progressCollections(player, TypeId.from(drop.getType()), drop.getAmount(), Trigger.BLOCK_LOOT);
+            manager.progressCollections(player, drop, Trigger.BLOCK_LOOT);
         }
     }
 }

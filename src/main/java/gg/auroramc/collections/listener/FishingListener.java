@@ -1,6 +1,5 @@
 package gg.auroramc.collections.listener;
 
-import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
 import org.bukkit.entity.Item;
@@ -22,10 +21,8 @@ public class FishingListener implements Listener {
         if (e.getCaught() == null) return;
         if (!(e.getCaught() instanceof Item item)) return;
 
-        var type = item.getItemStack().getType();
-        var amount = item.getItemStack().getAmount();
-
         var manager = plugin.getCollectionManager();
-        manager.progressCollections(e.getPlayer(), TypeId.from(type), amount, Trigger.FISH);
+
+        manager.progressCollections(e.getPlayer(), item.getItemStack(), Trigger.FISH);
     }
 }

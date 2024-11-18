@@ -32,7 +32,7 @@ public class EntityKillListener implements Listener {
         manager.progressCollections(killer, mobId, 1, Trigger.ENTITY_KILL);
 
         for (var drop : drops) {
-            manager.progressCollections(killer, plugin.getItemManager().resolveId(drop), drop.getAmount(), Trigger.ENTITY_LOOT);
+            manager.progressCollections(killer, drop, Trigger.ENTITY_LOOT);
         }
     }
 }

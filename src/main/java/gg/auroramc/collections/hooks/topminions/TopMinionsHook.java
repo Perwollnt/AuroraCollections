@@ -2,7 +2,6 @@ package gg.auroramc.collections.hooks.topminions;
 
 import com.sarry20.topminion.event.minion.MinionTakeInventoryItemsEvent;
 import com.sarry20.topminion.event.chest.ChestTakeItemsEvent;
-import gg.auroramc.aurora.api.AuroraAPI;
 import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
@@ -35,7 +34,7 @@ public class TopMinionsHook implements Hook, Listener {
         for (var drop : event.getChest().getInventory().getContents()) {
             if (drop == null) continue;
             plugin.getCollectionManager()
-                    .progressCollections(event.getPlayer(), AuroraAPI.getItemManager().resolveId(drop), drop.getAmount(), Trigger.MINION_LOOT);
+                    .progressCollections(event.getPlayer(), drop, Trigger.MINION_LOOT);
         }
     }
 }

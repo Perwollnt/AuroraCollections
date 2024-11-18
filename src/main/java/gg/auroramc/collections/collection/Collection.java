@@ -25,6 +25,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
@@ -143,6 +146,48 @@ public class Collection {
         return multiplier;
     }
 
+    private boolean matchesFilter(ItemStack item, TypeId typeId) {
+        List<CollectionConfig.ItemFilter> streamedFilters = config.getTypeFilters().stream()
+                .filter(f -> f.getType().equals(typeId.toString())).toList();
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return false;
+
+        for (CollectionConfig.ItemFilter filter : streamedFilters) {
+            for (String key : filter.getPdcFilters().getKeys(false)) {
+                NamespacedKey namespacedKey = NamespacedKey.fromString(key);
+                if (namespacedKey == null) continue;
+
+                String metaValue = null;
+
+                try {
+                    metaValue = meta.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING);
+                } catch (IllegalArgumentException ex) {
+                    AuroraCollections.logger().warning("Invalid PersistentDataContainer key in collection " + id + " for trigger " + typeId + ": " + key + ", its not a string?");
+                }
+
+                if (metaValue == null) return false;
+
+                String value = filter.getPdcFilters().getString(key);
+                if (value == null) return false;
+
+                if (!metaValue.equalsIgnoreCase(value)) {
+                    return false;
+                }
+
+            }
+
+            for (String key : filter.getMetaFilters().getKeys(false)) {
+                boolean matches = MetaChecker.matches(key, filter.getMetaFilters().getString(key), meta);
+                if (!matches) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Displays various notifications (if enabled) to users chat
      *
@@ -198,6 +243,20 @@ public class Collection {
             return 0;
         }
         return last;
+    }
+
+    public synchronized void progress(Player player, @Nullable TypeId typeId, int amount, String trigger, ItemStack itemStack) {
+        if (typeId != null && !config.getParsedTypes().contains(typeId)) {
+            return;
+        }
+
+        if (!AuroraAPI.getUser(player.getUniqueId()).isLoaded()) return;
+
+        if (itemStack != null) {
+            if (!matchesFilter(itemStack, typeId)) return;
+        }
+
+        this.progress(player, typeId, amount, trigger);
     }
 
     public synchronized void progress(Player player, @Nullable TypeId type, int amount, String trigger) {

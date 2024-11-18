@@ -29,8 +29,7 @@ public class MythicMobsListener implements Listener {
         manager.progressCollections(player, new TypeId("mythicmobs", mobName), 1, Trigger.ENTITY_KILL);
 
         for (var drop : drops) {
-            var typeId = plugin.getItemManager().resolveId(drop);
-            manager.progressCollections(player, typeId, drop.getAmount(), Trigger.ENTITY_LOOT);
+            manager.progressCollections(player, drop, Trigger.ENTITY_LOOT);
         }
     }
 }

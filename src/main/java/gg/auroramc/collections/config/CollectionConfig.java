@@ -29,6 +29,7 @@ public class CollectionConfig extends AuroraConfig {
     private ItemConfig menuItem;
     private Map<String, ItemConfig> customMenuItems;
     private List<Multiplier> multipliers = new ArrayList<>();
+    private List<ItemFilter> typeFilters = new ArrayList<>();
 
     @IgnoreField
     private Set<TypeId> parsedTypes;
@@ -42,6 +43,13 @@ public class CollectionConfig extends AuroraConfig {
     @Getter
     public static final class CustomLevel {
         private ConfigurationSection rewards;
+    }
+
+    @Getter
+    public static final class ItemFilter {
+        private String type;
+        private ConfigurationSection metaFilters;
+        private ConfigurationSection pdcFilters;
     }
 
     @Getter

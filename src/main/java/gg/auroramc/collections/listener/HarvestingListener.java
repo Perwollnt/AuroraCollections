@@ -42,7 +42,7 @@ public class HarvestingListener implements Listener {
 
             var manager = plugin.getCollectionManager();
             for (var drop : drops) {
-                manager.progressCollections(e.getPlayer(), TypeId.from(drop.getType()), drop.getAmount(), Trigger.HARVEST);
+                manager.progressCollections(e.getPlayer(), drop, Trigger.HARVEST);
             }
         }
     }

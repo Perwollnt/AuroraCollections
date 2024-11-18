@@ -1,5 +1,6 @@
 package gg.auroramc.collections.listener;
 
+import gg.auroramc.aurora.api.item.TypeId;
 import gg.auroramc.collections.AuroraCollections;
 import gg.auroramc.collections.collection.Trigger;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,7 @@ public class PlayerKillListener implements Listener {
         if (e.getEntity().equals(e.getEntity().getKiller())) return;
 
         var manager = plugin.getCollectionManager();
-        manager.progressCollections(killer, null, 1, Trigger.PLAYER_KILL);
+        manager.progressCollections(killer, (TypeId) null, 1, Trigger.PLAYER_KILL);
     }
 }
 

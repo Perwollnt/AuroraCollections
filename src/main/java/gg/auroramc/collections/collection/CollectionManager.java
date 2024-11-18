@@ -35,6 +35,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 public class CollectionManager implements Listener {
     private final AuroraCollections plugin;
@@ -118,7 +120,26 @@ public class CollectionManager implements Listener {
         return categories.containsKey(category);
     }
 
+    public void progressCollections(Player player, ItemStack itemStack, int amount, String... triggers) {
+        TypeId type = AuroraAPI.getItemManager().resolveId(itemStack);
+        ItemStack cloneStack = itemStack.clone();
+
+        progressCollections(player, (collection, trigger) -> {
+            collection.progress(player, type, amount, trigger, cloneStack);
+        }, triggers);
+    }
+
+    public void progressCollections(Player player, ItemStack itemStack, String... triggers) {
+        progressCollections(player, itemStack, itemStack.getAmount(), triggers);
+    }
+
     public void progressCollections(Player player, TypeId type, int amount, String... triggers) {
+        progressCollections(player, (collection, trigger) -> {
+            collection.progress(player, type, amount, trigger);
+        }, triggers);
+    }
+
+    private void progressCollections(Player player, BiConsumer<Collection, String> consumer, String... triggers) {
         if (!player.hasPermission("aurora.collections.use")) return;
         if (plugin.getConfigManager().getConfig().getPreventCreativeMode() && player.getGameMode() == GameMode.CREATIVE)
             return;
@@ -139,7 +160,7 @@ public class CollectionManager implements Listener {
                             .orElse(null);
 
                     if (firstMatch != null) {
-                        collection.progress(player, type, amount, firstMatch);
+                        consumer.accept(collection, firstMatch);
                         toUpdate.add(collection.getCategory() + "_" + collection.getId());
                         toUpdate.add("cc_" + collection.getCategory());
                     }

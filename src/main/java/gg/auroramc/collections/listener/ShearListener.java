@@ -35,7 +35,7 @@ public class ShearListener implements Listener {
 
         var manager = plugin.getCollectionManager();
         for (var drop : drops) {
-            manager.progressCollections(player, TypeId.from(drop.getType()), drop.getAmount(), Trigger.SHEAR_LOOT);
+            manager.progressCollections(player, drop, Trigger.SHEAR_LOOT);
         }
     }
 }
